@@ -139,6 +139,8 @@ def dump_all_modules(ckan_files, ckan_json):
         download_url = ckan_module[0]['download']
         mod_license = ckan_module[0]['license'] 
         
+        ckan_module[0]['x_original_download_url'] = download_url
+        
         hasher = sha1()
         hasher.update(download_url.encode('utf-8'))
         url_hash = hasher.hexdigest()[:8].upper()
@@ -176,7 +178,7 @@ def dump_all_modules(ckan_files, ckan_json):
 
         with open(os.path.join(LOCAL_CKAN_PATH, os.path.basename(ckan_module[1])), 'w') as out_ckan:
             json.dump(ckan_module[0], out_ckan)
-
+            
     return (ckan_mod_file_status, ckan_mod_status, ckan_last_updated)
 
 def update(master_repo, root_path, mirror_path):    
@@ -194,7 +196,12 @@ def update(master_repo, root_path, mirror_path):
         for ckan_module in ckan_json:
             identifier = ckan_module[0]['identifier']
             version = ckan_module[0]['version']
-            filename = identifier + '-' + version + '.zip'
+            download_url = ckan_module[0]['x_original_download_url']
+            
+            hasher = sha1()
+            hasher.update(download_url.encode('utf-8'))
+            url_hash = hasher.hexdigest()[:8].upper()
+            filename = url_hash + '-' + identifier + '-' + version + '.zip'
             
             if ckan_mod_file_status[filename] is not DLRESULT_HTTP_ERROR_NOT_CACHED:
                 mods_ok += 1
@@ -220,7 +227,12 @@ def update(master_repo, root_path, mirror_path):
         for ckan_module in ckan_json:
             identifier = ckan_module[0]['identifier']
             version = ckan_module[0]['version']
-            filename = identifier + '-' + version + '.zip'
+            download_url = ckan_module[0]['x_original_download_url']
+            
+            hasher = sha1()
+            hasher.update(download_url.encode('utf-8'))
+            url_hash = hasher.hexdigest()[:8].upper()
+            filename = url_hash + '-' + identifier + '-' + version + '.zip'
             
             style = "color: #339900;"
             if ckan_mod_file_status[filename] is DLRESULT_HTTP_ERROR_NOT_CACHED:
