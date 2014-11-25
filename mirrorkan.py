@@ -10,6 +10,7 @@ import json
 import datetime
 from dateutil.parser import parse
 from email.Utils import formatdate
+from hashlib import sha1
 
 from mirrorkan_conf import *
 from mirrorkan_db import *
@@ -36,7 +37,7 @@ def download_mod(url, path, filename):
     
     error = None
     
-    is_cached = db.is_cached(filename)
+    is_cached = db.is_cached(url)
     
     # Open the url
     try:
@@ -60,14 +61,14 @@ def download_mod(url, path, filename):
         last_modified = f.headers['last-modified']
         print 'last-modified header time: ' + last_modified
         
-        db_last_modified = db.get_lastmodified(filename)
+        db_last_modified = db.get_lastmodified(url)
         if db_last_modified != None:
             print 'database last modified time: ' + db_last_modified
         
-        if not db.is_newer(filename, last_modified):
+        if not db.is_newer(url, last_modified):
             return DLRESULT_CACHED
         
-        db.add_mod(filename, last_modified)
+        db.add_mod(url, filename, last_modified)
     elif is_cached:
         print 'last-modified header not found'
         return DLRESULT_CACHED
@@ -138,13 +139,16 @@ def dump_all_modules(ckan_files, ckan_json):
         download_url = ckan_module[0]['download']
         mod_license = ckan_module[0]['license'] 
         
-        filename = identifier + '-' + version + '.zip'
+        hasher = sha1()
+        hasher.update(download_url.encode('utf-8'))
+        url_hash = hasher.hexdigest()[:8].upper()
+        filename = url_hash + '-' + identifier + '-' + version + '.zip'
         
         ckan_mod_status[filename] = ''
        
         download_file_url = LOCAL_URL_PREFIX + filename
         
-        last_updated = db.get_lastmodified(filename)
+        last_updated = db.get_lastmodified(download_url)
         if last_updated is not None:
             ckan_last_updated[filename] = last_updated
         else:
