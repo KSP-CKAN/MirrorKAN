@@ -14,17 +14,12 @@ from hashlib import sha1
 
 from mirrorkan_conf import *
 from mirrorkan_db import *
+from mirrorkan_log import *
+from mirrorkan_util import zipdir, download_file, find_files_with_extension
 
 db = Database('db.json')
-
-def zipdir(path, zip):
-    for root, dirs, files in os.walk(path):
-        for file in files:
-            zip.write(os.path.join(root, file))
-
-def download_file(url, path, filename):
-    os.system('wget -O "' + os.path.join(path, filename) + '" "' + url + '"')
-    
+log = Log('log.json')
+   
 DLRESULT_SUCCESS = 1
 DLRESULT_CACHED = 2
 DLRESULT_HTTP_ERROR_CACHED = 3
@@ -70,8 +65,9 @@ def download_mod(url, path, filename):
         
         db.add_mod(url, filename, last_modified)
     elif is_cached:
-        print 'last-modified header not found'
         return DLRESULT_CACHED
+    else:
+        db.add_mod(url, filename, 'LastModifiedHeaderMissing')
      
     download_file(url, path, filename)
     
@@ -99,21 +95,9 @@ def parse_ckan_metadata_directory(path):
         
     return (ckan_files, ckan_json)
     
-def find_files_with_extension(directory, extension):
-    result_list = []
-    
-    file_list = [ f for f in listdir(directory) if isfile(join(directory, f)) ]
-    file_list.sort()
-    
-    for f in file_list:
-        fileName, fileExtension = os.path.splitext(f)
-        if fileExtension == extension:
-            result_list += [os.path.join(directory, f)]
-    
-    return result_list
-    
 def clean_up():
     print 'Cleaning up...',
+    log.clear()
     os.system('rm -R ' + LOCAL_CKAN_PATH + '/*')
     os.system('rm -R ' + MASTER_ROOT_PATH + '/*')
     print 'Done!'
@@ -129,137 +113,84 @@ def fetch_and_extract_master(master_repo, root_path):
         print 'Done!'
 
 def dump_all_modules(ckan_files, ckan_json):
-    ckan_mod_file_status = {}
-    ckan_mod_status = {}
-    ckan_last_updated = {}
-    
     for ckan_module in ckan_json:
         identifier = ckan_module[0]['identifier']
         version = ckan_module[0]['version']
         download_url = ckan_module[0]['download']
         mod_license = ckan_module[0]['license'] 
         
-        ckan_module[0]['x_original_download_url'] = download_url
+        ckan_module[0]['x_mirrorkan_download'] = download_url
         
         hasher = sha1()
         hasher.update(download_url.encode('utf-8'))
         url_hash = hasher.hexdigest()[:8].upper()
+      
         filename = url_hash + '-' + identifier + '-' + version + '.zip'
+        ckan_module[0]['x_mirrorkan_cached_filename'] = filename
         
-        ckan_mod_status[filename] = ''
-       
         download_file_url = LOCAL_URL_PREFIX + filename
         
         last_updated = db.get_lastmodified(download_url)
         if last_updated is not None:
-            ckan_last_updated[filename] = last_updated
+            ckan_module[0]['x_mirrorkan_last_updated'] = last_updated
         else:
-            ckan_last_updated[filename] = 'last-modified header missing'
+            ckan_module[0]['x_mirrorkan_last_updated'] = 'NotAvailable'
             
         if mod_license is not 'restricted' and mod_license is not 'unknown':
-            ckan_module[0]['download'] = download_file_url
             file_status = download_mod(download_url, FILE_MIRROR_PATH, filename)
-            ckan_mod_file_status[filename] = file_status
+            
+            ckan_module[0]['download'] = download_file_url
+            ckan_module[0]['x_alt_download'] = download_url
+            ckan_module[0]['x_mirrorkan_download_status'] = file_status
             
             if file_status is DLRESULT_SUCCESS:
                 print 'Success!'
-                ckan_mod_status[filename] = 'Just updated'
+                ckan_module[0]['x_mirrorkan_status'] = 'JustUpdated'
             elif file_status is DLRESULT_CACHED:
-                ckan_mod_status[filename] = 'Cached, no updates'
+                ckan_module[0]['x_mirrorkan_status'] = 'Cached'
                 print 'Cached'
             elif file_status is DLRESULT_HTTP_ERROR_CACHED:
-                ckan_mod_status[filename] = 'Cached, http error'
+                ckan_module[0]['x_mirrorkan_status'] = 'CachedHttpError'
+                log.logError('Processing module %s resulted in an HTTP error but we have the url in the cache' % identifier)
                 print 'HTTP Error (Cached)'
             elif file_status is DLRESULT_HTTP_ERROR_NOT_CACHED:
                 print 'HTTP Error (Not cached)'
-                ckan_mod_status[filename] = 'Not cached, http error'
-        
+                ckan_module[0]['x_mirrorkan_status'] = 'NotCachedHttpError'
+                log.logError('Processing module %s (%s) resulted in an HTTP error and the url is not cached, skipping..' % (identifier, ckan_module[0]['version']))
+                continue
+        else:
+            log.logWarning('Module %s has a non-permissive license so we are not allowed to cache it' % identifier)
+            
         print 'Dumping json for ' + identifier
 
         with open(os.path.join(LOCAL_CKAN_PATH, os.path.basename(ckan_module[1])), 'w') as out_ckan:
             json.dump(ckan_module[0], out_ckan)
-            
-    return (ckan_mod_file_status, ckan_mod_status, ckan_last_updated)
 
-def update(master_repo, root_path, mirror_path):    
+def create_master_zip(path, sourceDir):
+    print 'Creating new master.zip'
+    
+    zipf = zipfile.ZipFile(path, 'w')
+    zipdir(sourceDir, zipf)
+    zipf.close()
+    
+def update(master_repo, root_path, mirror_path):  
+    if not os.path.exists(MASTER_ROOT_PATH):
+        os.makedirs(MASTER_ROOT_PATH)
+    if not os.path.exists(LOCAL_CKAN_PATH):
+        os.makedirs(LOCAL_CKAN_PATH)
+    if not os.path.exists(FILE_MIRROR_PATH):
+        os.makedirs(FILE_MIRROR_PATH)
+        
     clean_up()
     fetch_and_extract_master(master_repo, root_path)
   
     ckan_files, ckan_json = parse_ckan_metadata_directory(os.path.join(root_path, 'CKAN-meta-master'))
-    ckan_mod_file_status, ckan_mod_status, ckan_last_updated = dump_all_modules(ckan_files, ckan_json)
-      
-    # generate index.html
-    if GENERATE_INDEX_HTML:
-        mods_ok = 0
-        mods_error = 0
-        
-        for ckan_module in ckan_json:
-            identifier = ckan_module[0]['identifier']
-            version = ckan_module[0]['version']
-            download_url = ckan_module[0]['x_original_download_url']
-            
-            hasher = sha1()
-            hasher.update(download_url.encode('utf-8'))
-            url_hash = hasher.hexdigest()[:8].upper()
-            filename = url_hash + '-' + identifier + '-' + version + '.zip'
-            
-            if ckan_mod_file_status[filename] is not DLRESULT_HTTP_ERROR_NOT_CACHED:
-                mods_ok += 1
-            else:
-                mods_error += 1
-        
-        index = '<html><head></head><body>'
-        index += INDEX_HTML_HEADER + '<br/>&nbsp;<br/>'
-        index += 'Last update: ' + str(datetime.datetime.now()) + '<br/>&nbsp;<br/>'
-        index += '<a href="' + LOCAL_URL_PREFIX + 'master.zip">master.zip</a><br/>'
-        index += '<a href="' + LOCAL_URL_PREFIX + 'log.txt">MirrorKAN log</a><br/>&nbsp;<br/>'
-        
-        index += 'Indexing ' + str(len(ckan_files)) + ' modules - '
-        index += '<font style="color: #339900; font-weight: bold;">'
-        index += str(mods_ok) + ' ok'
-        index += '</font>'
-        index += ', <font style="color: #CC3300; font-weight: bold;">'
-        index += str(mods_error) + ' failed'
-        index += '</font>'
-        index += '<br/>&nbsp;<br/>'
-        index += 'Modules list:<br/>'
-        
-        for ckan_module in ckan_json:
-            identifier = ckan_module[0]['identifier']
-            version = ckan_module[0]['version']
-            download_url = ckan_module[0]['x_original_download_url']
-            
-            hasher = sha1()
-            hasher.update(download_url.encode('utf-8'))
-            url_hash = hasher.hexdigest()[:8].upper()
-            filename = url_hash + '-' + identifier + '-' + version + '.zip'
-            
-            style = "color: #339900;"
-            if ckan_mod_file_status[filename] is DLRESULT_HTTP_ERROR_NOT_CACHED:
-                style = "color: #CC3300; font-weight: bold;"
-            elif ckan_mod_file_status[filename] is DLRESULT_HTTP_ERROR_CACHED:
-                style = "color: #FFD700; font-weight: bold;"
-            
-            index += '<font style="' + style + '">'
-            
-            index += '&nbsp;' + identifier + ' - ' + version + ' - '
-            index += 'Status: ' + ckan_mod_status[filename] + '(' + str(ckan_mod_file_status[filename]) + ') - '
-            index += 'Last update: ' + ckan_last_updated[filename] + '<br/>'
-            
-            index += '</font>'
-        
-        index += '</body></html>'
-
-        print 'Writing index.html'
-        index_file = open(os.path.join(FILE_MIRROR_PATH, 'index.html'), 'w')
-        index_file.write(index)
-        index_file.close()
+    dump_all_modules(ckan_files, ckan_json)
     
-    # zip up all generated files 
-    print 'Creating new master.zip'
-    zipf = zipfile.ZipFile(os.path.join(FILE_MIRROR_PATH, 'master.zip'), 'w')
-    zipdir(LOCAL_CKAN_PATH, zipf)
-    zipf.close()
+    log.logInfo('Processed %d modules' % len(ckan_json))
+    log.logInfo('Last update: %s UTC' % str(datetime.datetime.utcnow()))
+    
+    create_master_zip(os.path.join(FILE_MIRROR_PATH, 'master.zip'), LOCAL_CKAN_PATH)
     
     print 'Done!'
 

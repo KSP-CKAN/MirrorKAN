@@ -30,6 +30,9 @@ class Database:
                 return True
                 
             lastModifiedCached = db[url][0]
+            if lastModifiedCached == 'LastModifiedHeaderMissing':
+				return True
+            
             dateCached = parse(lastModifiedCached)
             dateIncoming = parse(lastModified)
             
