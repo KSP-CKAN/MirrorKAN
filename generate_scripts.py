@@ -25,8 +25,6 @@ def append_clone_repo(script, repo):
     
 def append_update_mirrorkan(script, mirrorkan_root):
     script.append("cd %s\n" % mirrorkan_root)
-    
-    append_clone_repo(script, "https://github.com/KSP-CKAN/MirrorKAN.git")
     script.append("cd MirrorKAN\n")
     script.append("python mirrorkan.py | $tee")
 

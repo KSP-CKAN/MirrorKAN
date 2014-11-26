@@ -10,7 +10,7 @@ class Log:
         if os.path.exists(path):
             return
         
-        clear()
+        self.clear()
         
     def clear(self):
         with open(self.path, 'w') as db_file:
