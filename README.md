@@ -14,6 +14,11 @@ MirrorKAN is the CKAN repository server. It has the following features:
 - wget
 - HTTP server
 
+### Configuring the HTTP server
+The only thing MirrorKAN needs from your HTTP server is to be able to serve static content at a predefined url.
+This means you need to have a local /path/to/folder/ which is accessible through some http://example.com/path/to/folder URL.
+MirrorKAN will ask for both the local path and the URL path during its installation.
+
 ### Installation
 Type the following in a bash shell to download and install MirrorKAN _to the current working directory_:
 
