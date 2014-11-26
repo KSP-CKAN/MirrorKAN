@@ -92,7 +92,13 @@ def main():
     print 'Generating shell scripts..'
     generate_scripts_path = os.path.join(os.path.join(root, "MirrorKAN"), "generate_scripts.py")
     log_path = os.path.join(mirror_path, 'log.txt')
-    os.system('python ' + generate_scripts_path + ' --clean --build-ckan --update-netkan --push-ckan-meta --update-mirrorkan --generate-index > ' + os.path.join(root, 'all.sh'))
+    
+    all_sh = '#!/bin/sh\n'
+    all_sh += 'python ' + generate_scripts_path + ' --clean --build-ckan --update-netkan --push-ckan-meta --update-mirrorkan --generate-index | sh\n' 
+    
+    with open(os.path.join(root, 'all.sh')), 'w') as all_sh_file:
+        all_sh_file.write(all_sh)
+        
     os.system('chmod a+x %s' % os.path.join(root, 'all.sh'))
     
     print 'Done!'
