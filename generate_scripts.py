@@ -73,6 +73,10 @@ def append_parse_events(script, mirrorkan_root, log_path):
     script.append("cd %s\n" % mirrorkan_root)
     script.append("python MirrorKAN/mirrorkan_parse_events.py %s MirrorKAN/log.json | $tee\n" % log_path)
 
+def append_generate_index(script, mirrorkan_root, mirrorkan_cache):
+    script.append("cd %s\n" % mirrorkan_root)
+    script.append("python MirrorKAN/mirrorkan_generate_index.py | $tee\n")
+
 def main():
     parser = argparse.ArgumentParser(description='Process some integers.')
     parser.add_argument('--clean', dest='clean', action='store_true', help='Clean-up build artifacts')
@@ -81,6 +85,7 @@ def main():
     parser.add_argument('--update-netkan', dest='update_netkan', action='store_true', help='Builds all NetKAN metadata')
     parser.add_argument('--push-ckan-meta', dest='push_ckan_meta', action='store_true', help='Pushes all new data to CKAN-meta')
     parser.add_argument('--update-mirrorkan', dest='update_mirrorkan', action='store_true', help='Updates MirrorKAN')
+    parser.add_argument('--generate-index', dest='generate_index', action='store_true', help='Generate index.html')
     args = parser.parse_args()
 
     log_path = os.path.join(FILE_MIRROR_PATH, "log.txt")
@@ -108,6 +113,9 @@ def main():
     if args.update_mirrorkan == True:
         append_parse_events(script, MIRRORKAN_ROOT, log_path)
         append_update_mirrorkan(script, MIRRORKAN_ROOT)
+        
+    if args.generate_index == True:
+        append_generate_index(script, MIRRORKAN_ROOT, FILE_MIRROR_ATH)
         
     print script.text
 
