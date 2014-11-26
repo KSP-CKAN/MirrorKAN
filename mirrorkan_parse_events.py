@@ -14,6 +14,7 @@ def main():
     log_db_path = sys.argv[2]
     
     log = Log(log_db_path)
+    log.clear()
     
     print 'Parsing %s' % log_txt_path
     
