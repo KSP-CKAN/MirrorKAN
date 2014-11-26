@@ -66,9 +66,9 @@ def main():
         if not os.path.exists(local_ckan):
             os.makedirs(local_ckan)
         
-        mirror_path = ask_user("Set the local path where downloads will be mirrored (must be visible on the web)", None)
-        local_url = ask_user("Set the URL pointing to the mirror path", None)
-        index_header = ask_user("Enter a description for this repo", None)
+        mirror_path = ask_user("Set the local path where downloads will be mirrored (must be visible on the web)", '/var/ckan/mirror/')
+        local_url = ask_user("Set the URL pointing to the mirror path", 'http://amsterdam.ksp-ckan.org/')
+        index_header = ask_user("Enter a description for this repo", 'CKAN Mirror')
         
         print 'Writing mirrorkan_conf.py..',
         make_config_file(config_path, master_repo, root, master_root, local_ckan, mirror_path, local_url, index_header)
