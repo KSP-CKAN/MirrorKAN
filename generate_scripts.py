@@ -115,7 +115,7 @@ def main():
         append_update_mirrorkan(script, MIRRORKAN_ROOT)
         
     if args.generate_index == True:
-        append_generate_index(script, MIRRORKAN_ROOT, FILE_MIRROR_ATH)
+        append_generate_index(script, MIRRORKAN_ROOT, FILE_MIRROR_PATH)
         
     print script.text
 
