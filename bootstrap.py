@@ -36,8 +36,8 @@ def main():
     config_source = None
     
     if os.path.exists(config_path):
-		with open(config_path, 'r') as config_file:
-			config_source = config_file.read()
+        with open(config_path, 'r') as config_file:
+            config_source = config_file.read()
     
     os.system('wget https://github.com/KSP-CKAN/MirrorKAN/archive/master.zip')
     os.system('unzip -o master.zip')
@@ -66,10 +66,10 @@ def main():
         make_config_file(config_path, master_repo, master_root, local_ckan, mirror_path, local_url, index_header)
         print 'Done!'
     else:
-		with open(config_path, 'w') as config_file:
-			print 'Writing mirrorkan_conf.py.. (cached)',
-			config_file.write(config_source)
-			print 'Done!'
+        with open(config_path, 'w') as config_file:
+            print 'Writing mirrorkan_conf.py.. (cached)',
+            config_file.write(config_source)
+            print 'Done!'
     
     print 'Generating shell scripts..'
     generate_scripts_path = os.path.join(os.path.join(root, "MirrorKAN"), "generate_scripts.py")
