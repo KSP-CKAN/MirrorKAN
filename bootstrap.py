@@ -51,9 +51,11 @@ def main():
     
     print 'Preparing configuration'
     
+    mirror_path = None
+    
     if config_source == None:
-		master_repo = ask_user("Set the CKAN master repository to mirror (url to master.zip)", "https://github.com/KSP-CKAN/CKAN-meta/archive/master.zip")
-		
+        master_repo = ask_user("Set the CKAN master repository to mirror (url to master.zip)", "https://github.com/KSP-CKAN/CKAN-meta/archive/master.zip")
+        
         master_root = os.path.join(root, 'master')
         if not os.path.exists(master_root):
             os.makedirs(master_root)
@@ -75,6 +77,10 @@ def main():
             print 'Writing mirrorkan_conf.py.. (cached)',
             config_file.write(config_source)
             print 'Done!'
+            
+        for line in config_source.split('\n'):
+			if 'FILE_MIRROR_PATH' in line:
+				mirror_path = line.split('=')[1].strip()
     
     if db_source != None:
         with open(db_path, 'w') as db_file:
