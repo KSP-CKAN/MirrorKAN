@@ -80,7 +80,7 @@ def main():
             
         for line in config_source.split('\n'):
             if 'FILE_MIRROR_PATH' in line:
-                mirror_path = line.split('=')[1].strip()
+                mirror_path = line.split('=')[1].strip().strip('\'')
     
     if db_source != None:
         with open(db_path, 'w') as db_file:
