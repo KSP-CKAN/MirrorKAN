@@ -28,13 +28,15 @@ def append_update_mirrorkan(script, mirrorkan_root):
     script.append("cd MirrorKAN\n")
     script.append("python mirrorkan.py | $tee")
 
-def append_ckan_build(script, mirrorkan_root):
+def append_ckan_build(script, mirrorkan_root, mirrorkan_cache):
     script.append("cd %s\n" % mirrorkan_root)
     
     script.append("rm CKAN -R\n")
     append_clone_repo(script, "https://github.com/KSP-CKAN/CKAN.git")
     script.append("cd CKAN\n")
     script.append("perl bin/build | $tee\n")
+    script.append("cp %s %s" % ("CKAN/ckan.exe", mirrorkan_cache))
+    script.append("cp %s %s" % ("CKAN/netkan.exe", mirrorkan_cache))
 
 def append_update_ckan_meta(script, mirrorkan_root):
     script.append("cd %s\n" % mirrorkan_root)
