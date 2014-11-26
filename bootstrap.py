@@ -2,13 +2,14 @@
 
 import os, sys
 
-def make_config_file(config_path, master_repo, master_root, lokal_ckan, mirror_path, local_url, index_header):
+def make_config_file(config_path, master_repo, mirrorkan_root, master_root, lokal_ckan, mirror_path, local_url, index_header):
     cfg = """MASTER_REPO = '%s'
+MIRRORKAN_ROOT = '%s'
 MASTER_ROOT_PATH = '%s'
 LOCAL_CKAN_PATH = '%s'
 FILE_MIRROR_PATH = '%s'
 LOCAL_URL_PREFIX = '%s'
-INDEX_HTML_HEADER = '%s'""" % (master_repo, master_root, lokal_ckan, mirror_path, local_url, index_header)
+INDEX_HTML_HEADER = '%s'""" % (master_repo, mirrorkan_root, master_root, lokal_ckan, mirror_path, local_url, index_header)
 
     with open(config_path, 'w') as config_file:
         config_file.write(cfg)
@@ -70,7 +71,7 @@ def main():
         index_header = ask_user("Enter a description for this repo", None)
         
         print 'Writing mirrorkan_conf.py..',
-        make_config_file(config_path, master_repo, master_root, local_ckan, mirror_path, local_url, index_header)
+        make_config_file(config_path, master_repo, root, master_root, local_ckan, mirror_path, local_url, index_header)
         print 'Done!'
     else:
         with open(config_path, 'w') as config_file:

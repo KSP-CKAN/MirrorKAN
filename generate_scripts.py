@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
 import os, sys
+import argparse
+
+from mirrorkan_conf import *
 
 class Script:
     def __init__(self):
@@ -71,29 +74,39 @@ def append_parse_events(script, mirrorkan_root, log_path):
     script.append("python MirrorKAN/mirrorkan_parse_events.py %s MirrorKAN/log.json | $tee\n" % log_path)
 
 def main():
-    if len(sys.argv) < 4:
-        print 'Usage:'
-        print sys.argv[0] + ' <target bash script> <log path> <mirrorkan root> <mirrorkan cache>'
-        sys.exit(0)
-    
-    log_path = sys.argv[2]     
-    mirrorkan_root = sys.argv[3]
-    mirrorkan_cache = sys.argv[4]
+    parser = argparse.ArgumentParser(description='Process some integers.')
+    parser.add_argument('--clean', dest='clean', action='store_true', help='Clean-up build artifacts')
+    parser.add_argument('--build-ckan', dest='build_ckan', action='store_true', help='Builds CKAN and NetKAN')
+    parser.add_argument('--update-netkan', dest='update_netkan', action='store_true', help='Builds all NetKAN metadata')
+    parser.add_argument('--push-ckan-meta', dest='push_ckan_meta', action='store_true', help='Pushes all new data to CKAN-meta')
+    parser.add_argument('--update-mirrorkan', dest='update_mirrorkan', action='store_true', help='Updates MirrorKAN')
+    args = parser.parse_args()
 
+    log_path = os.path.join(FILE_MIRROR_PATH, "log.txt")
+    
     script = Script()
     append_tee_header(script, log_path)
-    append_clean_up(script, log_path)
-    append_ckan_build(script, mirrorkan_root, mirrorkan_cache)
-    append_update_ckan_meta(script, mirrorkan_root)
-    append_update_netkan(script, mirrorkan_root, mirrorkan_cache)
-    append_push_ckan_meta(script, mirrorkan_root)
-    append_parse_events(script, mirrorkan_root, log_path)
-    append_update_mirrorkan(script, mirrorkan_root)
+    
+    if args.clean == True:
+        append_clean_up(script, log_path)
+    
+    if args.build_ckan == True:
+        append_ckan_build(script, MIRRORKAN_ROOT, FILE_MIRROR_PATH)
+    
+    if args.update_ckan_meta == True:
+        append_update_ckan_meta(script, MIRRORKAN_ROOT)
+
+    if args.update_netkan == True:
+        append_update_netkan(script, MIRRORKAN_ROOT, FILE_MIRROR_PATH)
+    
+    if args.push_ckan_meta == True:
+        append_push_ckan_meta(script, MIRRORKAN_ROOT)
+    
+    if args.update_mirrorkan == True:
+        append_parse_events(script, MIRRORKAN_ROOT, log_path)
+        append_update_mirrorkan(script, MIRRORKAN_ROOT)
         
-    with open(sys.argv[1], 'w') as script_file:
-        script_file.write(script.text)
-        
-    os.system('chmod a+x %s' % sys.argv[1])
+    print script.text
 
 if __name__ == "__main__":
     main()
