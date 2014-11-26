@@ -29,22 +29,26 @@ def ask_user(message, default):
 def main():
     print 'Bootstrapping MirrorKAN in the current working directory'
     
+    root = os.getcwd()
+    print 'Root: ' + root
+    
+    config_path = os.path.join(os.path.join(root, "MirrorKAN"), "mirrorkan_conf.py")
+    config_source = None
+    
+    if os.path.exists(config_path):
+		with open(config_path, 'r') as config_file:
+			config_source = config_file.read()
+    
     os.system('wget https://github.com/KSP-CKAN/MirrorKAN/archive/master.zip')
     os.system('unzip -o master.zip')
     os.system('rm master.zip')
-    os.system('mv MirrorKAN-master/* MirrorKAN/')
-    os.system('rm -R MirrorKAN-master')
+    os.system('mv MirrorKAN-master MirrorKAN')
     
     print 'Preparing configuration'
     
     master_repo = ask_user("Set the CKAN master repository to mirror (url to master.zip)", "https://github.com/KSP-CKAN/CKAN-meta/archive/master.zip")
     
-    root = os.getcwd()
-    print 'Root: ' + root
-    
-    config_path = os.path.join(os.path.join(root, "MirrorKAN"), "mirrorkan_conf.py")
-    
-    if not os.path.exists(config_path):
+    if config_source == None:
         master_root = os.path.join(root, 'master')
         if not os.path.exists(master_root):
             os.makedirs(master_root)
@@ -61,6 +65,11 @@ def main():
         print 'Writing mirrorkan_conf.py..',
         make_config_file(config_path, master_repo, master_root, local_ckan, mirror_path, local_url, index_header)
         print 'Done!'
+    else:
+		with open(config_path, 'w') as config_file:
+			print 'Writing mirrorkan_conf.py.. (cached)',
+			config_file.write(config_source)
+			print 'Done!'
     
     print 'Generating shell scripts..'
     generate_scripts_path = os.path.join(os.path.join(root, "MirrorKAN"), "generate_scripts.py")
