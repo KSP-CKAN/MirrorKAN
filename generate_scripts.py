@@ -64,6 +64,10 @@ def append_push_ckan_meta(script, mirrorkan_root):
     script.append("git commit -m \"NetKAN generated mods\" 2>&1 | $tee\n")
     script.append("git push 2>&1 | $tee\n")
 
+def append_parse_events(script, mirrorkan_root, log_path):
+    script.append("cd %s\n" % mirrorkan_root)
+    script.append("python MirrorKAN/mirrorkan_parse_events.py %s MirrorKan/db.json | $tee\n")
+
 def main():
     if len(sys.argv) < 4:
         print 'Usage:'
@@ -81,6 +85,7 @@ def main():
     append_update_ckan_meta(script, mirrorkan_root)
     append_update_netkan(script, mirrorkan_root, mirrorkan_cache)
     append_push_ckan_meta(script, mirrorkan_root)
+    append_parse_events(script, mirrorkan_root, log_path)
     append_update_mirrorkan(script, mirrorkan_root)
         
     with open(sys.argv[1], 'w') as script_file:
