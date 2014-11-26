@@ -46,11 +46,8 @@ def main():
         with open(db_path, 'r') as db_file:
             db_source = db_file.read()
     
-    os.system('wget https://github.com/KSP-CKAN/MirrorKAN/archive/master.zip')
-    os.system('unzip -o master.zip')
-    os.system('rm master.zip')
     os.system('rm -R MirrorKAN')
-    os.system('mv MirrorKAN-master MirrorKAN')
+    os.system('git clone https://github.com/KSP-CKAN/MirrorKAN.git')
     
     print 'Preparing configuration'
     
