@@ -51,9 +51,9 @@ def main():
     
     print 'Preparing configuration'
     
-    master_repo = ask_user("Set the CKAN master repository to mirror (url to master.zip)", "https://github.com/KSP-CKAN/CKAN-meta/archive/master.zip")
-    
     if config_source == None:
+		master_repo = ask_user("Set the CKAN master repository to mirror (url to master.zip)", "https://github.com/KSP-CKAN/CKAN-meta/archive/master.zip")
+		
         master_root = os.path.join(root, 'master')
         if not os.path.exists(master_root):
             os.makedirs(master_root)
