@@ -79,8 +79,8 @@ def main():
             print 'Done!'
             
         for line in config_source.split('\n'):
-			if 'FILE_MIRROR_PATH' in line:
-				mirror_path = line.split('=')[1].strip()
+            if 'FILE_MIRROR_PATH' in line:
+                mirror_path = line.split('=')[1].strip()
     
     if db_source != None:
         with open(db_path, 'w') as db_file:
