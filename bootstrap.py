@@ -35,13 +35,21 @@ def main():
     config_path = os.path.join(os.path.join(root, "MirrorKAN"), "mirrorkan_conf.py")
     config_source = None
     
+    db_path = os.path.join(os.path.join(root, "MirrorKAN"), "db.json")
+    db_source = None
+    
     if os.path.exists(config_path):
         with open(config_path, 'r') as config_file:
             config_source = config_file.read()
     
+    if os.path.exists(db_path):
+        with open(db_path, 'r') as db_file:
+            db_source = db_file.read()
+    
     os.system('wget https://github.com/KSP-CKAN/MirrorKAN/archive/master.zip')
     os.system('unzip -o master.zip')
     os.system('rm master.zip')
+    os.system('rm -R MirrorKAN')
     os.system('mv MirrorKAN-master MirrorKAN')
     
     print 'Preparing configuration'
@@ -69,6 +77,12 @@ def main():
         with open(config_path, 'w') as config_file:
             print 'Writing mirrorkan_conf.py.. (cached)',
             config_file.write(config_source)
+            print 'Done!'
+    
+    if db_source != None:
+        with open(db_path, 'w') as db_file:
+            print 'Writing db.json.. (cached)',
+            db_file.write(db_source)
             print 'Done!'
     
     print 'Generating shell scripts..'
