@@ -59,7 +59,7 @@ def append_update_netkan(script, mirrorkan_root, mirrorkan_cache):
     script.append("cd NetKAN")
     script.append_nolog("for f in *.netkan")
     script.append_nolog("do")
-    script.append("mono --debug --trace=E:all %s %s/$f --cachedir=%s --outputdir=%s 2>&1 | $tee" % (netkan_exe_path, netkans_path, mirrorkan_cache, output_path))
+    script.append("mono --debug %s %s/$f --cachedir=%s --outputdir=%s 2>&1 | $tee" % (netkan_exe_path, netkans_path, mirrorkan_cache, output_path))
     script.append_nolog("done")
 
 def append_push_ckan_meta(script, mirrorkan_root):
