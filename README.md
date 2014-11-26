@@ -16,7 +16,7 @@ MirrorKAN is the CKAN repository server. It has the following features:
 
 ### Configuring the HTTP server
 The only thing MirrorKAN needs from your HTTP server is to be able to serve static content at a predefined url.
-This means you need to have a local /path/to/folder/ which is accessible through some http://example.com/path/to/folder URL. Creating a /path/to/folder/foo.txt means that the file 'foo.txt' must be available at http://example.com/path/to/folder/foo.txt.
+This means you need to have a local _/path/to/folder/_ which is accessible through some _http://example.com/path/to/folder_ URL. Creating a _/path/to/folder/foo.txt_ means that the file _foo.txt_ must be available at _http://example.com/path/to/folder/foo.txt_.
 MirrorKAN will ask for both the local path and the URL path during its installation.
 
 ### Installation
