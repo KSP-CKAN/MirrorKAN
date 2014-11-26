@@ -57,11 +57,11 @@ def main():
     if config_source == None:
         master_repo = ask_user("Set the CKAN master repository to mirror (url to master.zip)", "https://github.com/KSP-CKAN/CKAN-meta/archive/master.zip")
         
-        master_root = os.path.join(root, 'master')
+        master_root = os.path.join(root, 'master/')
         if not os.path.exists(master_root):
             os.makedirs(master_root)
         
-        local_ckan = os.path.join(root, 'local_ckan')
+        local_ckan = os.path.join(root, 'local_ckan/')
         
         if not os.path.exists(local_ckan):
             os.makedirs(local_ckan)
