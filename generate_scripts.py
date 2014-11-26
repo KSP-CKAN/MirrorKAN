@@ -71,7 +71,7 @@ def append_push_ckan_meta(script, mirrorkan_root):
 
 def append_parse_events(script, mirrorkan_root, log_path):
     script.append("cd %s\n" % os.path.join(mirrorkan_root, "MirrorKAN"))
-    script.append("python MirrorKAN/mirrorkan_parse_events.py %s MirrorKAN/log.json | $tee\n" % log_path)
+    script.append("python mirrorkan_parse_events.py %s MirrorKAN/log.json | $tee\n" % log_path)
 
 def append_generate_index(script, mirrorkan_root, mirrorkan_cache):
     script.append("cd %s\n" % os.path.join(mirrorkan_root, "MirrorKAN"))
