@@ -29,7 +29,7 @@ def append_clone_repo(script, repo):
 def append_update_mirrorkan(script, mirrorkan_root):
     script.append("cd %s\n" % mirrorkan_root)
     script.append("cd MirrorKAN\n")
-    script.append("python mirrorkan.py | $tee")
+    script.append("python mirrorkan.py | $tee\n")
 
 def append_ckan_build(script, mirrorkan_root, mirrorkan_cache):
     script.append("cd %s\n" % mirrorkan_root)
