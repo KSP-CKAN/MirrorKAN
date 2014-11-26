@@ -15,7 +15,7 @@ MirrorKAN is the CKAN repository server. It has the following features:
 - HTTP server
 
 ### Installation
-Type the following in a bash shell to download and install MirrorKAN:
+Type the following in a bash shell to download and install MirrorKAN _in the current working directory_:
 
 `wget https://raw.githubusercontent.com/KSP-CKAN/MirrorKAN/master/bootstrap.py; python bootstrap.py`
 
