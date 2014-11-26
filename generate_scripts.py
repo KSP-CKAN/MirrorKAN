@@ -83,7 +83,7 @@ def main():
     script = Script()
     append_tee_header(script, log_path)
     append_clean_up(script, log_path)
-    append_ckan_build(script, mirrorkan_root)
+    append_ckan_build(script, mirrorkan_root, mirrorkan_cache)
     append_update_ckan_meta(script, mirrorkan_root)
     append_update_netkan(script, mirrorkan_root, mirrorkan_cache)
     append_push_ckan_meta(script, mirrorkan_root)
