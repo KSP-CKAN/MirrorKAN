@@ -77,6 +77,7 @@ def main():
     parser = argparse.ArgumentParser(description='Process some integers.')
     parser.add_argument('--clean', dest='clean', action='store_true', help='Clean-up build artifacts')
     parser.add_argument('--build-ckan', dest='build_ckan', action='store_true', help='Builds CKAN and NetKAN')
+    parser.add_argument('--update-ckan-meta', dest='update_ckan_meta', action='store_true', help='Fetches latest CKAN-meta')
     parser.add_argument('--update-netkan', dest='update_netkan', action='store_true', help='Builds all NetKAN metadata')
     parser.add_argument('--push-ckan-meta', dest='push_ckan_meta', action='store_true', help='Pushes all new data to CKAN-meta')
     parser.add_argument('--update-mirrorkan', dest='update_mirrorkan', action='store_true', help='Updates MirrorKAN')
@@ -97,6 +98,8 @@ def main():
         append_update_ckan_meta(script, MIRRORKAN_ROOT)
 
     if args.update_netkan == True:
+        if args.update_ckan_meta == False:
+            append_update_ckan_meta(script, MIRRORKAN_ROOT)
         append_update_netkan(script, MIRRORKAN_ROOT, FILE_MIRROR_PATH)
     
     if args.push_ckan_meta == True:
