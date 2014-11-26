@@ -32,7 +32,8 @@ def main():
     os.system('wget https://github.com/KSP-CKAN/MirrorKAN/archive/master.zip')
     os.system('unzip -o master.zip')
     os.system('rm master.zip')
-    os.system('mv MirrorKAN-master MirrorKAN')
+    os.system('mv MirrorKAN-master/* MirrorKAN/')
+    os.system('rm -R MirrorKAN-master')
     
     print 'Preparing configuration'
     
