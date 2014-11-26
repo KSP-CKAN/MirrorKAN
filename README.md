@@ -20,6 +20,7 @@ This means you need to have a local _/path/to/folder/_ which is accessible throu
 
 ### Installation
 Type the following in a bash shell to download and install MirrorKAN _to the current working directory_:
+Note that you can re-run the same command in the future to update MirrorKAN.
 
 `wget https://raw.githubusercontent.com/KSP-CKAN/MirrorKAN/master/bootstrap.py; python bootstrap.py`
 
