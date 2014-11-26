@@ -92,6 +92,8 @@ def main():
         
     with open(sys.argv[1], 'w') as script_file:
         script_file.write(script.text)
+        
+    os.system('chmod a+x %s' % sys.argv[1])
 
 if __name__ == "__main__":
     main()
