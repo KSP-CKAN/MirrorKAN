@@ -7,15 +7,14 @@ MirrorKAN is the CKAN repository server. It has the following features:
 - Can update NetKAN mods and automatically push to CKAN-meta
 - Can automatically mirror any CKAN repository, including itself
 
-Requirements:
-
+### Requirements
 - Linux
 - Python 2.7
 - python-dateutil
 - wget
 - HTTP server
 
-Installation:
+### Installation
 Type the following in a bash shell to bootstrap MirrorKAN and launch the configuration wizard:
 
 `wget https://raw.githubusercontent.com/KSP-CKAN/MirrorKAN/master/bootstrap.py; python bootstrap.py`
