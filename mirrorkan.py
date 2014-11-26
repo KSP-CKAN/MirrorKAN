@@ -97,7 +97,6 @@ def parse_ckan_metadata_directory(path):
     
 def clean_up():
     print 'Cleaning up...',
-    log.clear()
     os.system('rm -R ' + LOCAL_CKAN_PATH + '/*')
     os.system('rm -R ' + MASTER_ROOT_PATH + '/*')
     print 'Done!'
