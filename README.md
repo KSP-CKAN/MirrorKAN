@@ -19,4 +19,4 @@ Type the following in a bash shell to bootstrap MirrorKAN and launch the configu
 
 `wget https://raw.githubusercontent.com/KSP-CKAN/MirrorKAN/master/bootstrap.py; python bootstrap.py`
 
-After the configuration has completed, a shell script named 'all.sh' will be created. You can launch this script manually or add it to cron to run MirrorKAN.
+After the configuration has completed, a shell script named 'all.sh' will be created. You can launch this script manually or add it to cron to run MirrorKAN. Note that the update process will take a while and will consume non-trivial amounts of disk space (Keeping 10GB free for MirrorKAN is a good rule of thumb)
