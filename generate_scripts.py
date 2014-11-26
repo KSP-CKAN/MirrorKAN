@@ -66,7 +66,7 @@ def append_push_ckan_meta(script, mirrorkan_root):
 
 def append_parse_events(script, mirrorkan_root, log_path):
     script.append("cd %s\n" % mirrorkan_root)
-    script.append("python MirrorKAN/mirrorkan_parse_events.py %s MirrorKan/log.json | $tee\n" % log_path)
+    script.append("python MirrorKAN/mirrorkan_parse_events.py %s MirrorKAN/log.json | $tee\n" % log_path)
 
 def main():
     if len(sys.argv) < 4:
