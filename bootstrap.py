@@ -92,7 +92,9 @@ def main():
     print 'Generating shell scripts..'
     generate_scripts_path = os.path.join(os.path.join(root, "MirrorKAN"), "generate_scripts.py")
     log_path = os.path.join(mirror_path, 'log.txt')
-    os.system('python ' + generate_scripts_path + ' "' + os.path.join(root, 'all.sh') + '" "' + log_path + '" "' + root + '" "' + mirror_path + '"')
+    os.system('python ' + generate_scripts_path + ' > ' + os.path.join(root, 'all.sh'))
+    os.system('chmod a+x %s' % os.path.join(root, 'all.sh'))
+    
     print 'Done!'
     
 if __name__ == "__main__":

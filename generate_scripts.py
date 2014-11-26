@@ -7,7 +7,7 @@ from mirrorkan_conf import *
 
 class Script:
     def __init__(self):
-        self.text = ''
+        self.text = '#!/bin/sh\n'
         
     def append(self, text):
         if text.split(' ')[0] != 'echo':
