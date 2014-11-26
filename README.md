@@ -5,7 +5,7 @@ MirrorKAN is the CKAN repository server. It has the following features:
 
 - Continuous integration of CKAN and its toolset
 - Can update NetKAN mods and automatically push to CKAN-meta
-- Can automatically mirror any CKAN repository, including itself
+- Can automatically do a deep copy of any CKAN repository, including itself
 
 ### Requirements
 - Linux
