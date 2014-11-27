@@ -95,6 +95,8 @@ def append_generate_api(script, mirrorkan_root):
 
 def main():
     parser = argparse.ArgumentParser(description='Generate MirrorKAN scripts')
+    parser.add_argument('--log', dest='log_path', action='store', help='Set the log path')
+    
     parser.add_argument('--clean', dest='clean', action='store_true', help='Clean-up build artifacts')
 
     parser.add_argument('--build-ckan', dest='build_ckan', action='store_true', help='Builds CKAN and NetKAN')
@@ -123,6 +125,8 @@ def main():
         sys.exit(0)
 
     log_path = os.path.join(FILE_MIRROR_PATH, "log.txt")
+    if parser.log_path != None:
+        log_path = parser.log_path
     
     script = Script()
     append_tee_header(script, log_path)
