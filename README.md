@@ -7,7 +7,7 @@ MirrorKAN is the CKAN repository server. It has the following features:
 - Can update NetKAN mods and automatically push to CKAN-meta
 - Can automatically do a deep copy of any CKAN repository, including itself
 
-### Requirements
+### Dependencies
 - Linux
 - Python 2.7
 - python-dateutil
@@ -16,7 +16,7 @@ MirrorKAN is the CKAN repository server. It has the following features:
 - HTTP server
 - Perl
 - Java
-- All of NetKAN's requirements
+- All of NetKAN's dependencies
 
 ### Configuring the HTTP server
 The only thing MirrorKAN needs from your HTTP server is to be able to serve static content at a predefined url.
