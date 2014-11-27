@@ -78,7 +78,7 @@ def append_push_ckan_meta(script, mirrorkan_root):
     script.append("cd %s" % mirrorkan_root)
     script.append("cd CKAN-meta")
     script.append("set -e")
-    script.append("%s %s/*.ckan" % (os.path.join(mirrorkan_root, "CKAN/bin/ckan-validate"), os.path.join(mirrorkan_root, "CKAN-meta")))
+    script.append("%s %s/*.ckan | $tee" % (os.path.join(mirrorkan_root, "CKAN/bin/ckan-validate"), os.path.join(mirrorkan_root, "CKAN-meta")))
     script.append("git add * 2>&1 | $tee")
     script.append("git commit -m \"NetKAN generated mods\" 2>&1 | $tee")
     script.append("git push 2>&1 | $tee")
