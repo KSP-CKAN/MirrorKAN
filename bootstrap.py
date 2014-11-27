@@ -94,7 +94,7 @@ def main():
     log_path = os.path.join(mirror_path, 'log.txt')
     
     with open(os.path.join(root, 'all.sh'), 'w') as all_sh_file:
-        all_sh_file.write('#!/bin/sh\npython ' + generate_scripts_path + ' --clean --build-ckan --update-netkan --push-ckan-meta --update-mirrorkan --generate-index | sh\n')
+        all_sh_file.write('#!/bin/sh\npython ' + generate_scripts_path + ' --clean --build-ckan --update-netkan --push-ckan-meta --update-mirrorkan --generate-index --generate-api | sh\n')
         
     os.system('chmod a+x %s' % os.path.join(root, 'all.sh'))
     

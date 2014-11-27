@@ -21,7 +21,6 @@ def main():
     with open(log_txt_path, 'r') as log_txt_file:
         for line in log_txt_file.readlines():
             line = line.strip()
-            print line
             
             if '): warning C' in line and '.cs(' in line:
                 msg = 'Build warning: ' + line

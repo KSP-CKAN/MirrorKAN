@@ -73,9 +73,13 @@ def append_parse_events(script, mirrorkan_root, log_path):
     script.append("cd %s" % os.path.join(mirrorkan_root, "MirrorKAN"))
     script.append("python mirrorkan_parse_events.py %s log.json | $tee" % log_path)
 
-def append_generate_index(script, mirrorkan_root, mirrorkan_cache):
+def append_generate_index(script, mirrorkan_root):
     script.append("cd %s\n" % os.path.join(mirrorkan_root, "MirrorKAN"))
     script.append("python mirrorkan_generate_index.py | $tee")
+
+def append_generate_api(script, mirrorkan_root):
+    script.append("cd %s\n" % os.path.join(mirrorkan_root, "MirrorKAN"))
+    script.append("python mirrorkan_generate_api.py | $tee")
 
 def main():
     parser = argparse.ArgumentParser(description='Process some integers.')
@@ -86,6 +90,7 @@ def main():
     parser.add_argument('--push-ckan-meta', dest='push_ckan_meta', action='store_true', help='Pushes all new data to CKAN-meta')
     parser.add_argument('--update-mirrorkan', dest='update_mirrorkan', action='store_true', help='Updates MirrorKAN')
     parser.add_argument('--generate-index', dest='generate_index', action='store_true', help='Generate index.html')
+    parser.add_argument('--generate-api', dest='generate_api', action='store_true', help='Generate CKAN-API')
     args = parser.parse_args()
 
     log_path = os.path.join(FILE_MIRROR_PATH, "log.txt")
@@ -93,29 +98,32 @@ def main():
     script = Script()
     append_tee_header(script, log_path)
     
-    if args.clean == True:
+    if args.clean:
         append_clean_up(script, log_path)
     
-    if args.build_ckan == True:
+    if args.build_ckan:
         append_ckan_build(script, MIRRORKAN_ROOT, FILE_MIRROR_PATH)
     
-    if args.update_ckan_meta == True:
+    if args.update_ckan_meta:
         append_update_ckan_meta(script, MIRRORKAN_ROOT)
 
-    if args.update_netkan == True:
-        if args.update_ckan_meta == False:
+    if args.update_netkan:
+        if not args.update_ckan_meta:
             append_update_ckan_meta(script, MIRRORKAN_ROOT)
         append_update_netkan(script, MIRRORKAN_ROOT, FILE_MIRROR_PATH)
     
-    if args.push_ckan_meta == True:
+    if args.push_ckan_meta:
         append_push_ckan_meta(script, MIRRORKAN_ROOT)
     
-    if args.update_mirrorkan == True:
+    if args.update_mirrorkan:
         append_parse_events(script, MIRRORKAN_ROOT, log_path)
         append_update_mirrorkan(script, MIRRORKAN_ROOT)
         
-    if args.generate_index == True:
-        append_generate_index(script, MIRRORKAN_ROOT, FILE_MIRROR_PATH)
+    if args.generate_index:
+        append_generate_index(script, MIRRORKAN_ROOT)
+        
+    if args.generate_api:
+        append_generate_api(script, MIRRORKAN_ROOT)
         
     print script.text
 
