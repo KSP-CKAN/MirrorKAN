@@ -59,7 +59,17 @@ def append_update_netkan(script, mirrorkan_root, mirrorkan_cache):
     script.append("cd NetKAN")
     script.append_nolog("for f in *.netkan")
     script.append_nolog("do")
-    script.append("mono --debug %s %s/$f --cachedir=%s --outputdir=%s 2>&1 | $tee" % (netkan_exe_path, netkans_path, mirrorkan_cache, output_path))
+
+    auth = ""
+    token_path = os.path.join(os.path.join(mirrorkan_root, "MirrorKAN"), "github.token")
+    
+    if os.path.exists(token_path):
+        with open(token_path, 'r') as token_file:
+            token = token_file.read().strip()
+            auth = "--github-token=%s" % token
+            script.append("echo Using GitHub OAuth token from github.token")
+    
+    script.append("mono --debug %s %s/$f --cachedir=%s --outputdir=%s %s 2>&1 | $tee" % (netkan_exe_path, netkans_path, mirrorkan_cache, output_path, auth))
     script.append_nolog("done")
 
 def append_push_ckan_meta(script, mirrorkan_root):

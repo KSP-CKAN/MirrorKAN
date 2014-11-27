@@ -2,14 +2,15 @@
 
 import os, sys
 
-def make_config_file(config_path, master_repo, mirrorkan_root, master_root, lokal_ckan, mirror_path, local_url, index_header):
+def make_config_file(config_path, master_repo, mirrorkan_root, master_root, lokal_ckan, mirror_path, api_path, local_url, index_header):
     cfg = """MASTER_REPO = '%s'
 MIRRORKAN_ROOT = '%s'
 MASTER_ROOT_PATH = '%s'
 LOCAL_CKAN_PATH = '%s'
 FILE_MIRROR_PATH = '%s'
+API_PATH = '%s'
 LOCAL_URL_PREFIX = '%s'
-INDEX_HTML_HEADER = '%s'""" % (master_repo, mirrorkan_root, master_root, lokal_ckan, mirror_path, local_url, index_header)
+INDEX_HTML_HEADER = '%s'""" % (master_repo, mirrorkan_root, master_root, lokal_ckan, mirror_path, api_path, local_url, index_header)
 
     with open(config_path, 'w') as config_file:
         config_file.write(cfg)
@@ -68,10 +69,12 @@ def main():
         
         mirror_path = ask_user("Set the local path where downloads will be mirrored (must be visible on the web)", '/var/ckan/mirror/')
         local_url = ask_user("Set the URL pointing to the mirror path", 'http://amsterdam.ksp-ckan.org/')
+        
+        api_path = ask_user("Set the local path where the API will be generated", '/var/ckan/api')
         index_header = ask_user("Enter a description for this repo", 'CKAN Mirror')
         
         print 'Writing mirrorkan_conf.py..',
-        make_config_file(config_path, master_repo, root, master_root, local_ckan, mirror_path, local_url, index_header)
+        make_config_file(config_path, master_repo, root, master_root, local_ckan, mirror_path, api_path, local_url, index_header)
         print 'Done!'
     else:
         with open(config_path, 'w') as config_file:
@@ -99,6 +102,7 @@ def main():
     os.system('chmod a+x %s' % os.path.join(root, 'all.sh'))
     
     print 'Done!'
+    print 'You can place your GitHub OAuth token in %s to have NetKAN use it automatically' % os.path.join(os.path.join(root, "MirrorKAN"), "github.token")
     
 if __name__ == "__main__":
     main()
