@@ -128,8 +128,8 @@ def main():
         sys.exit(0)
 
     log_path = os.path.join(FILE_MIRROR_PATH, "log.txt")
-    if parser.log_path != None:
-        log_path = parser.log_path
+    if args.log_path != None:
+        log_path = args.log_path
     
     script = Script()
     append_tee_header(script, log_path)
