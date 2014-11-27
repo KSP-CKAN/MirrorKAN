@@ -11,7 +11,7 @@ class Script:
         
     def append(self, text):
         if text.split(' ')[0] != 'echo':
-            self.text += 'echo "Executing: %s" | $tee\n' % text.split('\n')[0].split('|')[0].replace('"', '')
+            self.text += 'echo "Executing: %s" | $tee\n' % text.split('\n')[0].split('|')[0].replace('"', '').replace('`', '\\`')
         self.text += text + '\n'
       
     def append_nolog(self, text):
@@ -31,11 +31,11 @@ def append_update_mirrorkan(script, mirrorkan_root):
     script.append("cd MirrorKAN")
     script.append("python mirrorkan.py | $tee")
 
-def append_ckan_build(script, mirrorkan_root, mirrorkan_cache):
+def append_ckan_build(script, mirrorkan_root, mirrorkan_cache, ckan_repo):
     script.append("cd %s" % mirrorkan_root)
     
     script.append("rm CKAN -R")
-    append_clone_repo(script, "https://github.com/KSP-CKAN/CKAN.git")
+    append_clone_repo(script, ckan_repo)
     script.append("cd CKAN")
     script.append("perl bin/build 2>&1 | $tee")
     script.append("cp %s %s" % ("ckan.exe", mirrorkan_cache))
@@ -57,18 +57,16 @@ def append_update_netkan(script, mirrorkan_root, mirrorkan_cache):
     append_clone_repo(script, "https://github.com/KSP-CKAN/NetKAN.git")
     script.append("cd NetKAN")
     script.append("cd NetKAN")
-    script.append_nolog("for f in *.netkan")
-    script.append_nolog("do")
-
+    
     auth = ""
     token_path = os.path.join(os.path.join(mirrorkan_root, "MirrorKAN"), "github.token")
     
     if os.path.exists(token_path):
-        with open(token_path, 'r') as token_file:
-            token = token_file.read().strip()
-            auth = "--github-token=%s" % token
-            script.append("echo Using GitHub OAuth token from github.token")
+        auth = "--github-token=`cat \"%s\"`" % token_path
+        script.append("echo Using GitHub OAuth token")
     
+    script.append_nolog("for f in *.netkan")
+    script.append_nolog("do")
     script.append("mono --debug %s %s/$f --cachedir=%s --outputdir=%s %s 2>&1 | $tee" % (netkan_exe_path, netkans_path, mirrorkan_cache, output_path, auth))
     script.append_nolog("done")
 
@@ -92,14 +90,22 @@ def append_generate_api(script, mirrorkan_root):
     script.append("python mirrorkan_generate_api.py | $tee")
 
 def main():
-    parser = argparse.ArgumentParser(description='Process some integers.')
+    parser = argparse.ArgumentParser(description='Generate MirrorKAN scripts')
     parser.add_argument('--clean', dest='clean', action='store_true', help='Clean-up build artifacts')
+
     parser.add_argument('--build-ckan', dest='build_ckan', action='store_true', help='Builds CKAN and NetKAN')
+    parser.add_argument('--ckan-repository', dest='ckan_repository', action='store', help='Overrides the default CKAN repository')
+    
     parser.add_argument('--update-ckan-meta', dest='update_ckan_meta', action='store_true', help='Fetches latest CKAN-meta')
+	
     parser.add_argument('--update-netkan', dest='update_netkan', action='store_true', help='Builds all NetKAN metadata')
+
     parser.add_argument('--push-ckan-meta', dest='push_ckan_meta', action='store_true', help='Pushes all new data to CKAN-meta')
+
     parser.add_argument('--update-mirrorkan', dest='update_mirrorkan', action='store_true', help='Updates MirrorKAN')
+
     parser.add_argument('--generate-index', dest='generate_index', action='store_true', help='Generate index.html')
+
     parser.add_argument('--generate-api', dest='generate_api', action='store_true', help='Generate CKAN-API')
     args = parser.parse_args()
 
@@ -112,7 +118,10 @@ def main():
         append_clean_up(script, log_path)
     
     if args.build_ckan:
-        append_ckan_build(script, MIRRORKAN_ROOT, FILE_MIRROR_PATH)
+        repo = "https://github.com/KSP-CKAN/CKAN.git"
+        if args.ckan_repository != None:
+            repo = args.ckan_repository
+        append_ckan_build(script, MIRRORKAN_ROOT, FILE_MIRROR_PATH, repo)
     
     if args.update_ckan_meta:
         append_update_ckan_meta(script, MIRRORKAN_ROOT)

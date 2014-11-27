@@ -102,7 +102,7 @@ def main():
     os.system('chmod a+x %s' % os.path.join(root, 'all.sh'))
     
     print 'Done!'
-    print 'You can place your GitHub OAuth token in %s to have NetKAN use it automatically' % os.path.join(os.path.join(root, "MirrorKAN"), "github.token")
+    print 'You can place your GitHub OAuth token in %s to have MirrorKAN use it automatically' % os.path.join(os.path.join(root, "MirrorKAN"), "github.token")
     
 if __name__ == "__main__":
     main()
