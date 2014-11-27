@@ -31,7 +31,7 @@ After the configuration wizard has completed, a shell script named 'all.sh' will
 
 ### Special use-cases
 
-If you want to only regenerate NetKAN metadata:
+To regenerate NetKAN metadata only - this will build the latest netkan.exe, fetch the latest NetKAN and CKAN-meta repos, run all netkan files through netkan.exe, then make a commit and push to CKAN-meta. You may wish to provide a GitHub app token in MirrorKAN/github.token because NetKAN will generate a lot of API requests and the API rate-limiting may make it fail spontaneously.
 ```
-wget -O bootstrap.py https://raw.githubusercontent.com/KSP-CKAN/MirrorKAN/master/bootstrap.py && python bootstrap.py && python MirrorKAN/generate_scripts.py --build-ckan --update-netkan --push-ckan-meta | sh 
+python MirrorKAN/generate_scripts.py --build-ckan --update-netkan --push-ckan-meta | sh 
 ```
