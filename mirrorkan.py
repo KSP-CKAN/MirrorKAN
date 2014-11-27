@@ -118,8 +118,6 @@ def dump_all_modules(ckan_files, ckan_json):
         download_url = ckan_module[0]['download']
         mod_license = ckan_module[0]['license'] 
         
-        ckan_module[0]['x_mirrorkan_download'] = download_url
-        
         hasher = sha1()
         hasher.update(download_url.encode('utf-8'))
         url_hash = hasher.hexdigest()[:8].upper()
@@ -131,9 +129,9 @@ def dump_all_modules(ckan_files, ckan_json):
         
         last_updated = db.get_lastmodified(download_url)
         if last_updated is not None:
-            ckan_module[0]['x_mirrorkan_last_updated'] = last_updated
+            ckan_module[0]['x_last_updated'] = last_updated
         else:
-            ckan_module[0]['x_mirrorkan_last_updated'] = 'NotAvailable'
+            ckan_module[0]['x_last_updated'] = 'NotAvailable'
             
         if mod_license is not 'restricted' and mod_license is not 'unknown':
             file_status = download_mod(download_url, FILE_MIRROR_PATH, filename)

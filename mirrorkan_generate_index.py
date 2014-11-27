@@ -63,7 +63,7 @@ def main():
         
         index += '&nbsp;' + identifier + ' - ' + version + ' - '
         index += 'Status: ' + ckan_module[0]['x_mirrorkan_status'] + '(' + str(ckan_module[0]['x_mirrorkan_download_status']) + ') - '
-        index += 'Last update: ' + ckan_module[0]['x_mirrorkan_last_updated'] + '<br/>'
+        index += 'Last update: ' + ckan_module[0]['x_last_updated'] + '<br/>'
         
         index += '</font>'
     
