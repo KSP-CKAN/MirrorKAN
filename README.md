@@ -15,7 +15,6 @@ MirrorKAN is the CKAN repository server. It has the following features:
 - git
 - HTTP server
 - Perl
-- Java
 - All of NetKAN's dependencies
 
 ### Configuring the HTTP server
