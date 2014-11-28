@@ -22,6 +22,7 @@ If you're on Ubuntu or Debian, this command-line will fetch all dependencies:
 apt-get install python wget git perl python-pip mono-devel
 pip install dateutil
 pip install jsonschema
+pip install pytz
 ```
 
 ### Configuring the HTTP server
