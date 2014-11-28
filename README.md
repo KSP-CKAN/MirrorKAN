@@ -34,6 +34,11 @@ After the configuration wizard has completed, a shell script named 'all.sh' will
 
 ### Special use-cases
 
+To build CKAN and NetKAN from master:
+```
+python MirrorKAN/generate_scripts.py --build-ckan | sh
+```
+
 To regenerate NetKAN metadata only - this will build the latest netkan.exe, fetch the latest NetKAN and CKAN-meta repos, run all netkan files through netkan.exe, then make a commit and push to CKAN-meta. 
 ```
 python MirrorKAN/generate_scripts.py --build-ckan --update-netkan --push-ckan-meta | sh 
