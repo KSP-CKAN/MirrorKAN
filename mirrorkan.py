@@ -143,6 +143,7 @@ def dump_all_modules(ckan_files, ckan_json):
             if file_status is DLRESULT_SUCCESS:
                 print 'Success!'
                 ckan_module[0]['x_mirrorkan_status'] = 'JustUpdated'
+                ckan_module[0]['x_last_updated'] = db.get_lastmodified(download_url)
             elif file_status is DLRESULT_CACHED:
                 ckan_module[0]['x_mirrorkan_status'] = 'Cached'
                 print 'Cached'
