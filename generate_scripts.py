@@ -82,7 +82,9 @@ def append_push_ckan_meta(script, mirrorkan_root):
     script.append("cd %s" % mirrorkan_root)
     script.append("cd CKAN-meta")
     script.append("git add * 2>&1 | $tee")
-    script.append("git commit -m \"NetKAN generated mods\" 2>&1 | $tee")
+    
+    commit_message = '`python %s/MirrorKAN/generate_commit_message.py`' % mirrorkan_root
+    script.append("git commit -m \"NetKAN generated mods - %s\" 2>&1 | $tee" % commit_message)
     script.append("git push 2>&1 | $tee")
     script.append("set +e")
 

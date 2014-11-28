@@ -2,7 +2,11 @@
 
 import os, sys
 from distutils.version import LooseVersion
+from dateutil.parser import parse
+from datetime import datetime, timedelta
 import json
+import operator
+import pytz
 
 from mirrorkan import parse_ckan_metadata_directory
 from mirrorkan_conf import *
@@ -15,6 +19,7 @@ def main():
     
     latest_versions = {}
     all_modules = {}
+    latest_versions_by_identifier = {}
     
     for ckan_module in ckan_json:
         identifier = ckan_module[0]['identifier']
@@ -26,8 +31,10 @@ def main():
             if py_version > py_version2:
                 print 'Version %s > %s' % (py_version, py_version2)
                 latest_versions[identifier] = version
+                latest_versions_by_identifier[identifier] = ckan_module
         else:
             latest_versions[identifier] = version
+            latest_versions_by_identifier[identifier] = ckan_module
     
     for ckan_module in ckan_json:
         identifier = ckan_module[0]['identifier']
@@ -40,10 +47,16 @@ def main():
             
         version = ckan_module[0]['version']
         
+        last_modified = 'unknown'
+        try:
+            last_modified = str(parse(ckan_module[0]['x_last_updated']))
+        except:
+            pass
+        
         if identifier in all_modules:
-            all_modules[identifier] += [(version, '/%s/%s' % (identifier, version))]
+             all_modules[identifier] += [ { 'version': version, 'path': '/%s/%s' % (identifier, version) } ]
         else:
-            all_modules[identifier] = [(version, '/%s/%s' % (identifier, version))]
+            all_modules[identifier] = [ { 'version': version, 'path': '/%s/%s' % (identifier, version) } ]
         
         ckan_path = ckan_module[1]
         
@@ -68,9 +81,9 @@ def main():
         latest_path = os.path.join(root_path, 'latest')
         
         if identifier in all_modules:
-            all_modules[identifier] += [('latest', '/%s/%s' % (identifier, version))]
+            all_modules[identifier] += [ { 'version': 'latest', 'path': '/%s/%s' % (identifier, version) } ]
         else:
-            all_modules[identifier] = [('latest', '/%s/%s' % (identifier, version))]
+            all_modules[identifier] = [ { 'version': 'latest', 'path': '/%s/%s' % (identifier, version) } ]
             
         print 'Symlink: %s -> %s' % (version_path, latest_path)
         
@@ -83,6 +96,32 @@ def main():
     with open(all_path, 'w') as all_file:
         print 'Writing %s' % all_path
         json.dump(all_modules, all_file)
+    
+    last_modified = {}
+    
+    for identifier, version in latest_versions.iteritems():
+        ckan_module = latest_versions_by_identifier[identifier]
+        parsed_date = None
+        try:
+            parsed_date = parse(ckan_module[0]['x_last_updated'])
+        except:
+            pass
+            
+        if parsed_date != None:
+            now = pytz.utc.localize(datetime.now() - timedelta(hours=24))
+            if parsed_date > now:
+                last_modified['/%s/%s' % (identifier, version)] = str(parsed_date)
+            
+    last_modified = sorted(last_modified.items(), key=operator.itemgetter(1), reverse=True)
+
+    pretty_last_modified = []
+    for url, time in last_modified:
+        pretty_last_modified += [ { 'module': url, 'last_updated': time } ]
+    
+    latest_path = os.path.join(API_PATH, 'latest')
+    with open(latest_path, 'w') as latest_file:
+        print 'Writing %s' % latest_path
+        json.dump(pretty_last_modified, latest_file)
     
     print 'Done!'
     
