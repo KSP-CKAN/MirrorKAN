@@ -7,20 +7,18 @@ MirrorKAN is the CKAN repository server. It has the following features:
 - Can update NetKAN mods and automatically push to CKAN-meta
 - Can automatically do a deep copy of any CKAN repository, including itself
 
-### Dependencies
-- Linux
+### Package dependencies
 - Python 2.7
 - python-dateutil
 - python-jsonschema
 - wget
 - git
-- HTTP server
 - Perl
 - All of NetKAN's dependencies
 
 If you're on Ubuntu or Debian, this command-line will fetch all dependencies:
 ```
-apt-get install python wget git perl python-pip
+apt-get install python wget git perl python-pip mono-devel
 pip install dateutil
 pip install jsonschema
 ```
