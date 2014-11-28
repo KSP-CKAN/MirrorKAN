@@ -70,7 +70,7 @@ def main():
         mirror_path = ask_user("Set the local path where downloads will be mirrored (must be visible on the web)", '/var/ckan/mirror/')
         local_url = ask_user("Set the URL pointing to the mirror path", 'http://amsterdam.ksp-ckan.org/')
         
-        api_path = ask_user("Set the local path where the API will be generated", '/var/ckan/api')
+        api_path = ask_user("Set the local path where the API will be generated", '/var/ckan/api/')
         index_header = ask_user("Enter a description for this repo", 'CKAN Mirror')
         
         print 'Writing mirrorkan_conf.py..',
