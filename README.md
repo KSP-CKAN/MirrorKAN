@@ -14,7 +14,7 @@ MirrorKAN is the CKAN repository server. It has the following features:
 - wget
 - git
 - Perl
-- All of NetKAN's dependencies
+- Mono
 
 If you're on Ubuntu or Debian, this command-line will fetch all dependencies:
 ```
