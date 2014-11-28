@@ -1,7 +1,7 @@
 MirrorKAN
 =========
 
-MirrorKAN is the CKAN repository server. It has the following features:
+MirrorKAN is the [CKAN](http://ksp-ckan.org) repository server. It has the following features:
 
 - Continuous integration of CKAN and its toolset
 - Can update NetKAN mods and automatically push to CKAN-meta
