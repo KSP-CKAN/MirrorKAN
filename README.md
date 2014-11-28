@@ -34,7 +34,10 @@ After the configuration wizard has completed, a shell script named 'all.sh' will
 
 ### Special use-cases
 
-To regenerate NetKAN metadata only - this will build the latest netkan.exe, fetch the latest NetKAN and CKAN-meta repos, run all netkan files through netkan.exe, then make a commit and push to CKAN-meta. You may wish to provide a GitHub app token in MirrorKAN/github.token because NetKAN will generate a lot of API requests and the API rate-limiting may make it fail spontaneously.
+To regenerate NetKAN metadata only - this will build the latest netkan.exe, fetch the latest NetKAN and CKAN-meta repos, run all netkan files through netkan.exe, then make a commit and push to CKAN-meta. 
 ```
 python MirrorKAN/generate_scripts.py --build-ckan --update-netkan --push-ckan-meta | sh 
 ```
+
+### GitHub OAuth
+You may wish to provide a GitHub app token in MirrorKAN/github.token because NetKAN will generate a lot of API requests and the API rate-limiting may make it fail spontaneously. To have MirrorKAN use your GitHub token save it to <mirrorkan_root>/MirrorKAN/github.token
