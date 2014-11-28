@@ -9,6 +9,8 @@ from mirrorkan_conf import *
 from mirrorkan_util import find_files_with_extension
 
 def main():
+    print 'Building CKAN-API..'
+
     ckan_files, ckan_json = parse_ckan_metadata_directory(LOCAL_CKAN_PATH)
     
     latest_versions = {}
@@ -82,6 +84,8 @@ def main():
     with open(all_path, 'w') as all_file:
         print 'Writing %s' % all_path
         json.dump(all_modules, all_file)
+    
+    print 'Done!'
     
 if __name__ == "__main__":
     main()
