@@ -40,4 +40,4 @@ python MirrorKAN/generate_scripts.py --build-ckan --update-netkan --push-ckan-me
 ```
 
 ### GitHub OAuth
-You may wish to provide a GitHub app token in MirrorKAN/github.token because NetKAN will generate a lot of API requests and the API rate-limiting may make it fail spontaneously. To have MirrorKAN use your GitHub token save it to <mirrorkan_root>/MirrorKAN/github.token
+You may wish to provide a GitHub app token in because NetKAN will generate a lot of API requests and the API rate-limiting may make it fail spontaneously. To have MirrorKAN use your GitHub token save it to `<mirrorkan_root>/MirrorKAN/github.token`
