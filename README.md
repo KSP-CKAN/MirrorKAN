@@ -26,6 +26,7 @@ pip install jsonschema
 ### Configuring the HTTP server
 The only thing MirrorKAN needs from your HTTP server is to be able to serve static content at a predefined url.
 This means you need to have a local _/path/to/folder/_ which is accessible through some _http://example.com/path/to/folder_ URL. Creating a _/path/to/folder/foo.txt_ means that the file _foo.txt_ must be available at _http://example.com/path/to/folder/foo.txt_. MirrorKAN will ask for both the local path and the URL path during its installation. Note that you can give MirrorKAN an arbitrary URL for testing purposes if an HTTP server is not available.
+The configuration script will also ask for a directory to store the API files, this is only necessary if you are calling generate_scripts.py with --generate-api.
 
 ### Installation
 Type the following in a bash shell to download and install MirrorKAN _to the current working directory_:
