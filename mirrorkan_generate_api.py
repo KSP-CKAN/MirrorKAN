@@ -34,7 +34,6 @@ def main():
         print 'Generating API for module %s' % identifier
         
         root_path = os.path.join(API_PATH, identifier)
-        print 'Root path: %s' % root_path
         
         if not os.path.exists(root_path):
             os.makedirs(root_path)
