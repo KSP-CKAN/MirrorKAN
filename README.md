@@ -11,6 +11,7 @@ MirrorKAN is the CKAN repository server. It has the following features:
 - Linux
 - Python 2.7
 - python-dateutil
+- python-jsonschema
 - wget
 - git
 - HTTP server
