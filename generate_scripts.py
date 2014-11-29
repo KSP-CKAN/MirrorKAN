@@ -24,7 +24,7 @@ def append_tee_header(script, log_path):
     script.append("tee='tee -a %s'" % log_path)
     
 def append_clone_repo(script, repo):
-	script.append("set -e")
+    script.append("set -e")
     script.append("git clone %s 2>&1 | $tee" % repo)
     script.append("set +e")
     
@@ -33,15 +33,15 @@ def append_update_mirrorkan(script, mirrorkan_root):
     script.append("cd MirrorKAN")
     script.append("python mirrorkan.py | $tee")
 
-def append_ckan_build(script, mirrorkan_root, mirrorkan_cache, ckan_repo):
+def append_ckan_build(script, mirrorkan_root, output_path, ckan_repo):
     script.append("cd %s" % mirrorkan_root)
     
     script.append("rm CKAN -R")
     append_clone_repo(script, ckan_repo)
     script.append("cd CKAN")
     script.append("perl bin/build 2>&1 | $tee")
-    script.append("cp %s %s" % ("ckan.exe", mirrorkan_cache))
-    script.append("cp %s %s" % ("netkan.exe", mirrorkan_cache))
+    script.append("cp %s %s" % ("ckan.exe", output_path))
+    script.append("cp %s %s" % ("netkan.exe", output_path))
 
 def append_update_ckan_meta(script, mirrorkan_root, ckan_meta_repo):
     script.append("cd %s" % mirrorkan_root)
@@ -110,6 +110,7 @@ def main():
 
     parser.add_argument('--build-ckan', dest='build_ckan', action='store_true', help='Builds CKAN and NetKAN')
     parser.add_argument('--ckan-repository', dest='ckan_repository', action='store', help='Overrides the default CKAN repository')
+    parser.add_argument('--ckan-build-output', dest='ckan_build_output', action='store', help='Sets the CKAN build output directory')
     
     parser.add_argument('--update-ckan-meta', dest='update_ckan_meta', action='store_true', help='Fetches latest CKAN-meta')
     
@@ -147,7 +148,11 @@ def main():
         repo = "https://github.com/KSP-CKAN/CKAN.git"
         if args.ckan_repository != None:
             repo = args.ckan_repository
-        append_ckan_build(script, MIRRORKAN_ROOT, FILE_MIRROR_PATH, repo)
+            
+        output_path = FILE_MIRROR_PATH
+        if args.ckan_build_output != None:
+            output_path = args.ckan_build_output
+        append_ckan_build(script, MIRRORKAN_ROOT, output_path, repo)
     
     if args.update_ckan_meta:
         repo = "https://github.com/KSP-CKAN/CKAN-meta.git"
