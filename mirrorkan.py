@@ -122,7 +122,7 @@ def dump_all_modules(ckan_files, ckan_json):
         hasher.update(download_url.encode('utf-8'))
         url_hash = hasher.hexdigest()[:8].upper()
       
-        filename = url_hash + '-' + identifier + '-' + version + '.zip'
+        filename = '%s.zip' % url_hash
         ckan_module[0]['x_mirrorkan_cached_filename'] = filename
         
         download_file_url = LOCAL_URL_PREFIX + filename
