@@ -8,6 +8,7 @@ from urllib2 import urlopen, URLError, HTTPError
 import zipfile
 import json
 import datetime
+import calendar
 from dateutil.parser import parse
 from email.Utils import formatdate
 from hashlib import sha1
@@ -78,7 +79,16 @@ def parse_ckan_metadata(filename):
     
     with open(filename) as json_file:
         data = json.load(json_file)
-        
+
+    # Default 'Sat, 03 Mar 1973 09:46:40 GMT', and also alphabetically sortable
+    data['x_last_updated_ts'] = 1000000000
+    if 'x_last_updated' in data:
+        try:
+            date_tuple = parse(data['x_last_updated']).timetuple()
+            data['x_last_updated_ts'] = calendar.timegm(date_tuple)
+        except ValueError:
+            pass
+
     return data
     
 def parse_ckan_metadata_directory(path):
