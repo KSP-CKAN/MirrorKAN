@@ -1,0 +1,6 @@
+*~
+*.pyc
+
+#
+all.sh
+mirrorkan_conf.py

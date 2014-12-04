@@ -15,7 +15,8 @@ MirrorKAN is the [CKAN](http://ksp-ckan.org) repository server. It has the follo
 - git
 - Perl
 - Mono
-- python-pytz (optional, --generate-api only)
+- python-pytz (optional, --generate-api and --generate-feeds only)
+- python-pyrss2gen (optional, --generate-feeds only)
 
 If you're on Ubuntu or Debian, this command-line will fetch all dependencies:
 ```

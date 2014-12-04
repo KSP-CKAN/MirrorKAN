@@ -2,15 +2,16 @@
 
 import os, sys
 
-def make_config_file(config_path, master_repo, mirrorkan_root, master_root, lokal_ckan, mirror_path, api_path, local_url, index_header):
+def make_config_file(config_path, master_repo, mirrorkan_root, master_root, lokal_ckan, mirror_path, api_path, feed_path, local_url, index_header):
     cfg = """MASTER_REPO = '%s'
 MIRRORKAN_ROOT = '%s'
 MASTER_ROOT_PATH = '%s'
 LOCAL_CKAN_PATH = '%s'
 FILE_MIRROR_PATH = '%s'
 API_PATH = '%s'
+FEED_PATH = '%s'
 LOCAL_URL_PREFIX = '%s'
-INDEX_HTML_HEADER = '%s'""" % (master_repo, mirrorkan_root, master_root, lokal_ckan, mirror_path, api_path, local_url, index_header)
+INDEX_HTML_HEADER = '%s'""" % (master_repo, mirrorkan_root, master_root, lokal_ckan, mirror_path, api_path, feed_path, local_url, index_header)
 
     with open(config_path, 'w') as config_file:
         config_file.write(cfg)
@@ -71,10 +72,13 @@ def main():
         local_url = ask_user("Set the URL pointing to the mirror path", 'http://amsterdam.ksp-ckan.org/')
         
         api_path = ask_user("Set the local path where the API will be generated", '/var/ckan/api/')
+
+        feed_path = ask_user("Set the local path where the RSS Feed will be generated", '/var/ckan/feed/')
+
         index_header = ask_user("Enter a description for this repo", 'CKAN Mirror')
         
         print 'Writing mirrorkan_conf.py..',
-        make_config_file(config_path, master_repo, root, master_root, local_ckan, mirror_path, api_path, local_url, index_header)
+        make_config_file(config_path, master_repo, root, master_root, local_ckan, mirror_path, api_path, feed_path, local_url, index_header)
         print 'Done!'
     else:
         with open(config_path, 'w') as config_file:
@@ -97,7 +101,7 @@ def main():
     log_path = os.path.join(mirror_path, 'log.txt')
     
     with open(os.path.join(root, 'all.sh'), 'w') as all_sh_file:
-        all_sh_file.write('#!/bin/sh\npython ' + generate_scripts_path + ' --clean --build-ckan --update-netkan --push-ckan-meta --update-mirrorkan --generate-index --generate-api | sh\n')
+        all_sh_file.write('#!/bin/sh\npython ' + generate_scripts_path + ' --clean --build-ckan --update-netkan --push-ckan-meta --update-mirrorkan --generate-index --generate-api --generate-feed | sh\n')
         
     os.system('chmod a+x %s' % os.path.join(root, 'all.sh'))
     

@@ -102,6 +102,10 @@ def append_generate_api(script, mirrorkan_root):
     script.append("cd %s\n" % os.path.join(mirrorkan_root, "MirrorKAN"))
     script.append("python mirrorkan_generate_api.py | $tee")
 
+def append_generate_feed(script, mirrorkan_root):
+    script.append("cd %s\n" % os.path.join(mirrorkan_root, "MirrorKAN"))
+    script.append("python mirrorkan_generate_feed.py | $tee")
+
 def main():
     parser = argparse.ArgumentParser(description='Generate MirrorKAN scripts')
     parser.add_argument('--log', dest='log_path', action='store', help='Set the log path')
@@ -127,6 +131,8 @@ def main():
 
     parser.add_argument('--generate-api', dest='generate_api', action='store_true', help='Generate CKAN-API')
     
+    parser.add_argument('--generate-feed', dest='generate_feed', action='store_true', help='Generate CKAN RSS Feed')
+
     parser.add_argument('--output', dest='output', action='store', help='Output file path, if omitted will print to stdout')
     args = parser.parse_args()
     
@@ -189,10 +195,13 @@ def main():
         
     if args.generate_index:
         append_generate_index(script, MIRRORKAN_ROOT)
-        
+
     if args.generate_api:
         append_generate_api(script, MIRRORKAN_ROOT)
         
+    if args.generate_feed:
+        append_generate_feed(script, MIRRORKAN_ROOT)
+
     if args.output == None:
         print script.text
     else:
