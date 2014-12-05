@@ -69,8 +69,9 @@ def main():
     
     index += '</body></html>'
 
-    print 'Writing index.html'
-    index_file = open(os.path.join(FILE_MIRROR_PATH, 'index.html'), 'w')
+    index_file_path = os.path.join(FILE_MIRROR_PATH, 'index.html')
+    print 'Writing %s' % index_file_path
+    index_file = open(index_file_path, 'w')
     index_file.write(index)
     index_file.close()
     
