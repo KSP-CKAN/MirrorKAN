@@ -88,6 +88,8 @@ def parse_ckan_metadata(filename):
             data['x_last_updated_ts'] = calendar.timegm(date_tuple)
         except ValueError:
             pass
+        except TypeError:
+            pass
 
     return data
     
