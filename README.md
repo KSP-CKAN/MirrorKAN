@@ -21,7 +21,7 @@ MirrorKAN is the [CKAN](http://ksp-ckan.org) repository server. It has the follo
 If you're on Ubuntu or Debian, this command-line will fetch all dependencies:
 ```
 apt-get install python wget git perl python-pip mono-devel
-pip install dateutil jsonschema pytz
+pip install dateutil jsonschema pytz rss2gen
 ```
 
 ### Configuring the HTTP server
