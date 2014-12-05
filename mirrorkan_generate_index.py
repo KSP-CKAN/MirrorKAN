@@ -25,7 +25,7 @@ def main():
     index += INDEX_HTML_HEADER + '<br/>&nbsp;<br/>'
     index += '<a href="' + LOCAL_URL_PREFIX + 'master.zip">master.zip</a><br/>'
     index += '<a href="' + LOCAL_URL_PREFIX + 'ckan.exe">ckan.exe</a> | <a href="' + LOCAL_URL_PREFIX + 'netkan.exe">netkan.exe</a><br/>'
-    index += '<a href="' + LOCAL_URL_PREFIX + 'feed/ckan.rss">RSS Feed</a><br/>&nbsp;<br/>'
+    index += '<a href="' + LOCAL_URL_PREFIX + 'ckan.rss">RSS Feed</a><br/>&nbsp;<br/>'
     index += '<a href="' + LOCAL_URL_PREFIX + 'log.txt">MirrorKAN log</a><br/>&nbsp;<br/>'
     
     info = log.getInfo()
