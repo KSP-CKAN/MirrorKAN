@@ -17,10 +17,15 @@ DLRESULT_HTTP_ERROR_NOT_CACHED = 4
 def main():
     ckan_files, ckan_json = parse_ckan_metadata_directory(LOCAL_CKAN_PATH)
     
-    index = '<html><head></head><body>'
+    index = '<html>'
+    index += '<head>'
+    index += '<link rel="alternate" type="application/rss+xml" title="RSS" href="' + LOCAL_URL_PREFIX + 'feed/ckan.rss" />'
+    index += '</head>'
+    index += '<body>'
     index += INDEX_HTML_HEADER + '<br/>&nbsp;<br/>'
     index += '<a href="' + LOCAL_URL_PREFIX + 'master.zip">master.zip</a><br/>'
     index += '<a href="' + LOCAL_URL_PREFIX + 'ckan.exe">ckan.exe</a> | <a href="' + LOCAL_URL_PREFIX + 'netkan.exe">netkan.exe</a><br/>'
+    index += '<a href="' + LOCAL_URL_PREFIX + 'feed/ckan.rss">RSS Feed</a><br/>&nbsp;<br/>'
     index += '<a href="' + LOCAL_URL_PREFIX + 'log.txt">MirrorKAN log</a><br/>&nbsp;<br/>'
     
     info = log.getInfo()
@@ -69,8 +74,9 @@ def main():
     
     index += '</body></html>'
 
-    print 'Writing index.html'
-    index_file = open(os.path.join(FILE_MIRROR_PATH, 'index.html'), 'w')
+    index_file_path = os.path.join(FILE_MIRROR_PATH, 'index.html')
+    print 'Writing %s' % index_file_path
+    index_file = open(index_file_path, 'w')
     index_file.write(index)
     index_file.close()
     
