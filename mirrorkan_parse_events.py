@@ -19,8 +19,9 @@ def main():
     print 'Parsing %s' % log_txt_path
     
     with open(log_txt_path, 'r') as log_txt_file:
-        for line in log_txt_file.readlines():
-            line = line.strip()
+        lines = log_txt_file.readlines()
+        for i in xrange(0, len(lines)):
+            line = lines[i].strip()
             
             if '): warning C' in line and '.cs(' in line:
                 msg = 'Build warning: ' + line
@@ -37,6 +38,10 @@ def main():
                 log.logInfo(msg)
                 print msg
                 continue
+            elif 'Bad embedded KSP-AVC' in line:
+                msg = 'NetKAN error: ' + lines[i-1].strip() + ' -> ' + line
+                log.logError(msg)
+                print msg
     
     print 'Done!'
     
