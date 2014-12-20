@@ -118,10 +118,13 @@ def fetch_and_extract_master(master_repo, root_path):
     download_file(master_repo, '', 'master.zip')
     print 'Done!'
     
-    with zipfile.ZipFile('master.zip', 'r') as zip_file:
-        print 'Extracting master.zip..',
-        zip_file.extractall(root_path)
-        print 'Done!'
+    # CentOS 6.x yum needs python 2.6
+    zipfile_path = os.path.join(root_path, branch + '.zip')
+    print 'Extracting %s to %s ..' % (zipfile_path, root_path)
+    zip_file = zipfile.ZipFile(zipfile_path, 'r')
+    zip_file.extractall(path=root_path)
+    zip_file.close()
+    print 'Done!'
 
 def dump_all_modules(ckan_files, ckan_json):
     for ckan_module in ckan_json:
