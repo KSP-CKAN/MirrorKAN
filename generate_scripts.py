@@ -48,7 +48,7 @@ def append_update_ckan_meta(script, mirrorkan_root, ckan_meta_repo):
     script.append("rm CKAN-meta -R")
     append_clone_repo(script, ckan_meta_repo)
     
-def append_update_netkan(script, mirrorkan_root, mirrorkan_cache, netkan_repo, file_list):
+def append_update_netkan(script, mirrorkan_root, mirrorkan_cache, netkan_repo, netkan_opts, file_list):
     script.append("cd %s" % mirrorkan_root)
     
     netkan_exe_path = os.path.join(os.path.join(mirrorkan_root, "CKAN"), "netkan.exe")
@@ -125,6 +125,8 @@ def main():
     parser.add_argument('--push-ckan-meta', dest='push_ckan_meta', action='store_true', help='Pushes all new data to CKAN-meta')
     parser.add_argument('--ckan-meta-repository', dest='ckan_meta_repository', action='store', help='Overrides the default CKAN-meta repository')
 
+    parser.add_argument('--netkan_opts', dest='netkan_opts', action='store', help='Optional additional flags to netkan')
+
     parser.add_argument('--update-mirrorkan', dest='update_mirrorkan', action='store_true', help='Updates MirrorKAN')
 
     parser.add_argument('--generate-index', dest='generate_index', action='store_true', help='Generate index.html')
@@ -176,6 +178,11 @@ def main():
         repo = "https://github.com/KSP-CKAN/NetKAN.git"
         if args.netkan_repository != None:
             repo = args.netkan_repository
+
+        netkan_opts = NETKAN_OPTS
+        if args.netkan_opts != None:
+            netkan_opts = args.netkan_opts
+
         file_list = None
         
         if args.netkan_file_list != None:
@@ -184,7 +191,7 @@ def main():
                 if len(item.strip()) > 0:
                     file_list += [item.strip()]
             
-        append_update_netkan(script, MIRRORKAN_ROOT, FILE_MIRROR_PATH, repo, file_list)
+        append_update_netkan(script, MIRRORKAN_ROOT, FILE_MIRROR_PATH, repo, netkan_opts, file_list)
     
     if args.push_ckan_meta:
         append_push_ckan_meta(script, MIRRORKAN_ROOT)
