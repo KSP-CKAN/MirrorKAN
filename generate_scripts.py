@@ -25,7 +25,7 @@ def append_tee_header(script, log_path):
     
 def append_clone_repo(script, repo):
     script.append("set -e")
-    script.append("git clone %s 2>&1 | $tee" % repo)
+    script.append("git clone --recursive %s 2>&1 | $tee" % repo)
     script.append("set +e")
     
 def append_update_mirrorkan(script, mirrorkan_root):
