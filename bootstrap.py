@@ -2,16 +2,17 @@
 
 import os, sys
 
-def make_config_file(config_path, master_repo, mirrorkan_root, master_root, lokal_ckan, mirror_path, api_path, feed_path, local_url, index_header):
+def make_config_file(config_path, master_repo, mirrorkan_root, netkan_opts, master_root, lokal_ckan, mirror_path, api_path, feed_path, local_url, index_header):
     cfg = """MASTER_REPO = '%s'
 MIRRORKAN_ROOT = '%s'
+NETKAN_OPTS = '%s'
 MASTER_ROOT_PATH = '%s'
 LOCAL_CKAN_PATH = '%s'
 FILE_MIRROR_PATH = '%s'
 API_PATH = '%s'
 FEED_PATH = '%s'
 LOCAL_URL_PREFIX = '%s'
-INDEX_HTML_HEADER = '%s'""" % (master_repo, mirrorkan_root, master_root, lokal_ckan, mirror_path, api_path, feed_path, local_url, index_header)
+INDEX_HTML_HEADER = '%s'""" % (master_repo, mirrorkan_root, netkan_opts, master_root, lokal_ckan, mirror_path, api_path, feed_path, local_url, index_header)
 
     with open(config_path, 'w') as config_file:
         config_file.write(cfg)
@@ -68,6 +69,8 @@ def main():
         if not os.path.exists(local_ckan):
             os.makedirs(local_ckan)
         
+        netkan_opts = ask_user("Additional Options to pass to netkan (e.g. --prerelease, --jenkins)", '')
+
         mirror_path = ask_user("Set the local path where downloads will be mirrored (must be visible on the web)", '/var/ckan/mirror/')
         local_url = ask_user("Set the URL pointing to the mirror path", 'http://amsterdam.ksp-ckan.org/')
         
@@ -78,7 +81,7 @@ def main():
         index_header = ask_user("Enter a description for this repo", 'CKAN Mirror')
         
         print 'Writing mirrorkan_conf.py..',
-        make_config_file(config_path, master_repo, root, master_root, local_ckan, mirror_path, api_path, feed_path, local_url, index_header)
+        make_config_file(config_path, master_repo, root, netkan_opts, master_root, local_ckan, mirror_path, api_path, feed_path, local_url, index_header)
         print 'Done!'
     else:
         with open(config_path, 'w') as config_file:
