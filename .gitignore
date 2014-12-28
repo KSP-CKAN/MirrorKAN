@@ -15,3 +15,4 @@ ckan.exe
 netkan.exe
 var-ckan
 *-pre
+*.netkan
