@@ -1,0 +1,17 @@
+*~
+.bash*
+.config
+.d*
+.emacs
+.mono
+.ssh
+.viminfo
+CKAN*
+Dropbox
+MirrorKAN*
+NetKAN*
+ckan.exe
+*.py
+netkan.exe
+var-ckan
+*-pre
