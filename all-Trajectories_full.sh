@@ -12,7 +12,7 @@ cp ${HERE}/Dropbox/ckan/*.exe ${HERE}/CKAN
 if [ -d ${HERE}/MirrorKAN.x ]
 then
     rm -f ${HERE}/MirrorKAN.x/mirrorkan_conf.py
-    ln -sf ${HERE}/mirrorkan_conf_Trajectories_full.py ${HERE}/MirrorKAN.x/mirrorkan_conf.py
+    ln -sf ${HERE}/MirrorKAN.munich/mirrorkan_conf_Trajectories_full.py ${HERE}/MirrorKAN.x/mirrorkan_conf.py
 fi
 
 
