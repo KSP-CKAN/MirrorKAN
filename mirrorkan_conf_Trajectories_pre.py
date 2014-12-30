@@ -1,5 +1,5 @@
 CKAN_META_REPO = 'git@github.com:hakan42/CKAN-meta-dev'
-NETKAN_REPO = 'git@github.com:hakan42/NetKAN-dev'
+NETKAN_REPO = 'git@github.com:KSP-CKAN/NetKAN-dev'
 BRANCH = 'Trajectories-pre'
 MASTER_REPO = 'https://github.com/hakan42/CKAN-meta-dev/archive/Trajectories-pre.zip'
 NETKAN_OPTS = '--prerelease'
