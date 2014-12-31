@@ -33,15 +33,10 @@ def append_update_mirrorkan(script, mirrorkan_root):
     script.append("cd MirrorKAN")
     script.append("python mirrorkan.py | $tee")
 
-def append_ckan_build(script, mirrorkan_root, output_path, ckan_repo):
+def append_ckan_download(script, mirrorkan_root, output_path, ckan_url, netkan_url):
     script.append("cd %s" % mirrorkan_root)
-    
-    script.append("rm CKAN -R")
-    append_clone_repo(script, ckan_repo)
-    script.append("cd CKAN")
-    script.append("perl bin/build 2>&1 | $tee")
-    script.append("cp %s %s" % ("ckan.exe", output_path))
-    script.append("cp %s %s" % ("netkan.exe", output_path))
+    script.append("wget -O \"%s/ckan.exe\" %s" % (output_path, ckan_url))
+	script.append("wget -O \"%s/netkan.exe\" %s" % (output_path, netkan_url))
 
 def append_update_ckan_meta(script, mirrorkan_root, ckan_meta_repo):
     script.append("cd %s" % mirrorkan_root)
@@ -112,10 +107,10 @@ def main():
     
     parser.add_argument('--clean', dest='clean', action='store_true', help='Clean-up build artifacts')
 
-    parser.add_argument('--build-ckan', dest='build_ckan', action='store_true', help='Builds CKAN and NetKAN')
-    parser.add_argument('--ckan-repository', dest='ckan_repository', action='store', help='Overrides the default CKAN repository')
-    parser.add_argument('--ckan-build-output', dest='ckan_build_output', action='store', help='Sets the CKAN build output directory')
-    
+    parser.add_argument('--ckan-url', dest='ckan_url', action='store', help='Overrides the default CKAN.exe download url')
+	parser.add_argument('--netkan-url', dest='netkan_url', action='store', help='Overrides the default NetKAN.exe download url')
+    parser.add_argument('--ckan-output', dest='ckan_output', action='store', help='Sets the CKAN.exe/NetKAN.exe destination directory')
+	
     parser.add_argument('--update-ckan-meta', dest='update_ckan_meta', action='store_true', help='Fetches latest CKAN-meta')
     
     parser.add_argument('--update-netkan', dest='update_netkan', action='store_true', help='Builds all NetKAN metadata')
@@ -152,15 +147,20 @@ def main():
     if args.clean:
         append_clean_up(script, log_path)
     
-    if args.build_ckan:
-        repo = "https://github.com/KSP-CKAN/CKAN.git"
-        if args.ckan_repository != None:
-            repo = args.ckan_repository
-            
-        output_path = FILE_MIRROR_PATH
-        if args.ckan_build_output != None:
-            output_path = args.ckan_build_output
-        append_ckan_build(script, MIRRORKAN_ROOT, output_path, repo)
+	ckan_url = 'http://ci.ksp-ckan.org:8080/job/CKAN/lastSuccessfulBuild/artifact/ckan.exe'
+	netkan_url = 'http://ci.ksp-ckan.org:8080/job/NetKAN/lastSuccessfulBuild/artifact/netkan.exe'
+	
+	if args.ckan_url != None:
+		ckan_url = args.ckan_url
+	
+	if args.netkan_url != None:
+		netkan_url = args.netkan_url
+	
+	output_path = FILE_MIRROR_PATH
+	if args.ckan_build_output != None:
+		output_path = args.ckan_build_output
+	
+	append_ckan_download(script, MIRRORKAN_ROOT, output_path, ckan_url, netkan_url)
     
     if args.update_ckan_meta:
         repo = "https://github.com/KSP-CKAN/CKAN-meta.git"
