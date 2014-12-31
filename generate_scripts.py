@@ -48,7 +48,7 @@ def append_update_ckan_meta(script, mirrorkan_root, ckan_meta_repo):
 def append_update_netkan(script, mirrorkan_root, mirrorkan_cache, netkan_repo, netkan_opts, file_list):
     script.append("cd %s" % mirrorkan_root)
     
-    netkan_exe_path = os.path.join(os.path.join(mirrorkan_root, "CKAN"), "netkan.exe")
+    netkan_exe_path = os.path.join(mirrorkan_root, "netkan.exe")
     netkans_path = os.path.join(mirrorkan_root, "NetKAN")
     output_path = os.path.join(mirrorkan_root, "CKAN-meta")
     
