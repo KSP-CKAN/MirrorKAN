@@ -72,10 +72,13 @@ def append_update_netkan(script, mirrorkan_root, mirrorkan_cache, netkan_repo, n
             script.append("mono --debug %s \"%s/%s\" --cachedir=%s --outputdir=%s %s %s 2>&1 | $tee" % (netkan_exe_path, netkans_path, item, mirrorkan_cache, output_path, netkan_opts, auth))
 
 def append_push_ckan_meta(script, mirrorkan_root):
-    script.append("cd %s" % mirrorkan_root)
-    script.append("cd CKAN/bin")
     script.append("set -e")
-    script.append("python %s %s/*.ckan | $tee" % ("ckan-validate.py", os.path.join(mirrorkan_root, "CKAN-meta")))
+    script.append("wget --quiet https://raw.githubusercontent.com/KSP-CKAN/CKAN/master/bin/ckan-validate.py -O ckan-validate.py")
+    script.append("wget --quiet https://raw.githubusercontent.com/KSP-CKAN/CKAN/master/CKAN.schema -O CKAN.schema")
+    script.append("chmod a+x ckan-validate.py")
+    script.append("./ckan-validate.py %s/*.ckan" % os.path.join(mirrorkan_root, "CKAN-meta"))
+    script.append("python %s %s/*.ckan | $tee" % ("ckan-validate.py", ))
+ 
     script.append("cd %s" % mirrorkan_root)
     script.append("cd CKAN-meta")
     script.append("git add * 2>&1 | $tee")
