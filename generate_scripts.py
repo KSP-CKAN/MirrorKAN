@@ -35,8 +35,10 @@ def append_update_mirrorkan(script, mirrorkan_root):
 
 def append_ckan_download(script, mirrorkan_root, output_path, ckan_url, netkan_url):
     script.append("cd %s" % mirrorkan_root)
-    script.append("wget -O \"%s/ckan.exe\" %s" % (output_path, ckan_url))
-    script.append("wget -O \"%s/netkan.exe\" %s" % (output_path, netkan_url))
+    script.append("wget -O ckan.exe %s" % (output_path, ckan_url))
+    script.append("wget -O netkan.exe %s" % (output_path, netkan_url))
+    script.append("cp ckan.exe %s" % output_path)
+    script.append("cp netkan.exe %s" % output_path)
 
 def append_update_ckan_meta(script, mirrorkan_root, ckan_meta_repo):
     script.append("cd %s" % mirrorkan_root)
