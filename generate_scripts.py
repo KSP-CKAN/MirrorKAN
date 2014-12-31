@@ -75,14 +75,15 @@ def append_update_netkan(script, mirrorkan_root, mirrorkan_cache, netkan_repo, n
 
 def append_push_ckan_meta(script, mirrorkan_root):
     script.append("set -e")
-    script.append("wget --quiet https://raw.githubusercontent.com/KSP-CKAN/CKAN/master/bin/ckan-validate.py -O ckan-validate.py")
-    script.append("wget --quiet https://raw.githubusercontent.com/KSP-CKAN/CKAN/master/CKAN.schema -O CKAN.schema")
-    script.append("chmod a+x ckan-validate.py")
-    script.append("./ckan-validate.py %s/*.ckan" % os.path.join(mirrorkan_root, "CKAN-meta"))
  
     script.append("cd %s" % mirrorkan_root)
     script.append("cd CKAN-meta")
     script.append("git add * 2>&1 | $tee")
+    script.append("wget --quiet https://raw.githubusercontent.com/KSP-CKAN/CKAN/master/bin/ckan-validate.py -O ckan-validate.py")
+    script.append("wget --quiet https://raw.githubusercontent.com/KSP-CKAN/CKAN/master/CKAN.schema -O CKAN.schema")
+    script.append("chmod a+x ckan-validate.py")
+    script.append("./ckan-validate.py `git diff --name-only --stat origin/master`")
+    script.append("rm ckan-validate.py")
     
     commit_message = '`python %s/MirrorKAN/generate_commit_message.py`' % mirrorkan_root
     script.append("git commit -m \"NetKAN generated mods - %s\" 2>&1 | $tee" % commit_message)
