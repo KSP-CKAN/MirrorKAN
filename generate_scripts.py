@@ -35,8 +35,8 @@ def append_update_mirrorkan(script, mirrorkan_root):
 
 def append_ckan_download(script, mirrorkan_root, output_path, ckan_url, netkan_url):
     script.append("cd %s" % mirrorkan_root)
-    script.append("wget -O ckan.exe %s" % (output_path, ckan_url))
-    script.append("wget -O netkan.exe %s" % (output_path, netkan_url))
+    script.append("wget -O ckan.exe %s" % ckan_url)
+    script.append("wget -O netkan.exe %s" % netkan_url)
     script.append("cp ckan.exe %s" % output_path)
     script.append("cp netkan.exe %s" % output_path)
 
