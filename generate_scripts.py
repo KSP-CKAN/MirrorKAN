@@ -157,8 +157,8 @@ def main():
         netkan_url = args.netkan_url
     
     output_path = FILE_MIRROR_PATH
-    if args.ckan_build_output != None:
-        output_path = args.ckan_build_output
+    if args.ckan_output != None:
+        output_path = args.ckan_output
     
     append_ckan_download(script, MIRRORKAN_ROOT, output_path, ckan_url, netkan_url)
     
