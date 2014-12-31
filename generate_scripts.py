@@ -84,6 +84,7 @@ def append_push_ckan_meta(script, mirrorkan_root):
     script.append("chmod a+x ckan-validate.py")
     script.append("./ckan-validate.py `git diff --name-only --stat origin/master`")
     script.append("rm ckan-validate.py")
+    script.append("rm CKAN.schema")
     
     commit_message = '`python %s/MirrorKAN/generate_commit_message.py`' % mirrorkan_root
     script.append("git commit -m \"NetKAN generated mods - %s\" 2>&1 | $tee" % commit_message)
