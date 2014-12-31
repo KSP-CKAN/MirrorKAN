@@ -77,7 +77,6 @@ def append_push_ckan_meta(script, mirrorkan_root):
     script.append("wget --quiet https://raw.githubusercontent.com/KSP-CKAN/CKAN/master/CKAN.schema -O CKAN.schema")
     script.append("chmod a+x ckan-validate.py")
     script.append("./ckan-validate.py %s/*.ckan" % os.path.join(mirrorkan_root, "CKAN-meta"))
-    script.append("python %s %s/*.ckan | $tee" % ("ckan-validate.py", ))
  
     script.append("cd %s" % mirrorkan_root)
     script.append("cd CKAN-meta")
