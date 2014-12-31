@@ -167,19 +167,19 @@ def main():
     append_ckan_download(script, MIRRORKAN_ROOT, output_path, ckan_url, netkan_url)
     
     if args.update_ckan_meta:
-        repo = "https://github.com/KSP-CKAN/CKAN-meta.git"
+        repo = "git@github.com:KSP-CKAN/CKAN-meta"
         if args.ckan_meta_repository != None:
             repo = args.ckan_meta_repository
         append_update_ckan_meta(script, MIRRORKAN_ROOT, repo)
 
     if args.update_netkan:
         if not args.update_ckan_meta:
-            repo = "https://github.com/KSP-CKAN/CKAN-meta.git"
+            repo = "git@github.com:KSP-CKAN/CKAN-meta"
             if args.ckan_meta_repository != None:
                 repo = args.ckan_meta_repository
             append_update_ckan_meta(script, MIRRORKAN_ROOT, repo)
         
-        repo = "https://github.com/KSP-CKAN/NetKAN.git"
+        repo = "git@github.com:KSP-CKAN/NetKAN"
         if args.netkan_repository != None:
             repo = args.netkan_repository
 
