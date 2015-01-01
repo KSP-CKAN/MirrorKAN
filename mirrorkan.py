@@ -108,7 +108,7 @@ def parse_ckan_metadata_directory(path):
     return (ckan_files, ckan_json)
     
 def clean_up():
-    print 'Cleaning up...',
+    print 'Cleaning up...', 
     os.system('rm -R ' + LOCAL_CKAN_PATH + '/*')
     os.system('rm -R ' + MASTER_ROOT_PATH + '/*')
     print 'Done!'
@@ -119,7 +119,7 @@ def fetch_and_extract_master(master_repo, root_path):
     print 'Done!'
     
     # CentOS 6.x yum needs python 2.6
-    zipfile_path = os.path.join(root_path, branch + '.zip')
+    zipfile_path = os.path.join(root_path, 'master.zip')
     print 'Extracting %s to %s ..' % (zipfile_path, root_path)
     zip_file = zipfile.ZipFile(zipfile_path, 'r')
     zip_file.extractall(path=root_path)
