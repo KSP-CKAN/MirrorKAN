@@ -115,7 +115,7 @@ def clean_up():
     
 def fetch_and_extract_master(master_repo, root_path):
     print 'Fetching remote master..',
-    download_file(master_repo, '', 'master.zip')
+    download_file(master_repo, root_path, 'master.zip')
     print 'Done!'
     
     # CentOS 6.x yum needs python 2.6
