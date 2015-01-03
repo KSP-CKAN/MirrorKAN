@@ -18,7 +18,7 @@ fi
 
 THINGS=""
 THINGS="${THINGS} --clean"
-THINGS="${THINGS} --update-netkan"
+# THINGS="${THINGS} --update-netkan"
 THINGS="${THINGS} --push-ckan-meta"
 THINGS="${THINGS} --update-mirrorkan"
 THINGS="${THINGS} --generate-index"
