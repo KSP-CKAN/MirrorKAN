@@ -67,15 +67,13 @@ def append_update_netkan(script, mirrorkan_root, mirrorkan_cache, netkan_repo, n
     if file_list == None:   
         script.append_nolog("for f in *.netkan")
         script.append_nolog("do")
+        script.append("/bin/mkdir -p %s/$(basename -s .netkan \"$f\")" % (output_path))
         script.append("mono --debug %s \"%s/NetKAN/$f\" --cachedir=%s --outputdir=\"%s/$(basename -s .netkan \"$f\")/\" %s %s 2>&1 | $tee" % (netkan_exe_path, netkans_path, mirrorkan_cache, output_path, netkan_opts, auth))
         script.append_nolog("done")
     else:
         for item in file_list:
             out_dir = os.path.join(output_path, os.path.splitext(os.path.basename(item))[0])
-            script.append("if [ ! -d %s ]" % out_dir)
-            script.append("then")
-            script.append("mkdir %s" % out_dir)
-            script.append("fi")
+            script.append("/bin/mkdir -p %s" % (out_dir))
             script.append("mono --debug %s \"%s/%s\" --cachedir=%s --outputdir=%s %s %s 2>&1 | $tee" % (netkan_exe_path, netkans_path, item, mirrorkan_cache, out_dir, netkan_opts, auth))
 
 def append_push_ckan_meta(script, mirrorkan_root):
