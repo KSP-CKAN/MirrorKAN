@@ -67,7 +67,7 @@ def append_update_netkan(script, mirrorkan_root, mirrorkan_cache, netkan_repo, n
     if file_list == None:   
         script.append_nolog("for f in *.netkan")
         script.append_nolog("do")
-        script.append("/bin/mkdir -p %s/$(basename -s .netkan \"$f\")" % (output_path))
+        script.append_nolog("/bin/mkdir -p %s/$(basename -s .netkan \"$f\")" % (output_path))
         script.append("mono --debug %s \"%s/NetKAN/$f\" --cachedir=%s --outputdir=\"%s/$(basename -s .netkan \"$f\")/\" %s %s 2>&1 | $tee" % (netkan_exe_path, netkans_path, mirrorkan_cache, output_path, netkan_opts, auth))
         script.append_nolog("done")
     else:
